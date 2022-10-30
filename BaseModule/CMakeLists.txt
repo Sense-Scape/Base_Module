@@ -9,11 +9,11 @@ project(SC_Base_Module_Types C CXX ASM)
 # Adding Chunk Types to modules
 find_library(SC_Chunk_Types
 			PUBLIC
-			$ENV{SC_INCLUDE_DIRS}/Cpp_Chunk_Types/Cpp_Chunk_Types/build
+			$ENV{SC_LIB_DIR}/Lib_Base_Module/BaseModule/build
 			)
 include_directories(SC_Chunk_Types
 				INTERFACE
-				$ENV{SC_INCLUDE_DIRS}/Cpp_Chunk_Types/Cpp_Chunk_Types
+				$ENV{SC_LIB_DIR}/Lib_Base_Module/BaseModule/
 				)
 
 # What to add to library
