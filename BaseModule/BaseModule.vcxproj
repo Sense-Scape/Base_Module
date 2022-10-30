@@ -142,11 +142,6 @@
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ModuleTypes.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Cpp_Chunk_Types\Cpp_Chunk_Types\CPP_Chunk_Types.vcxproj">
-      <Project>{5583b73c-eb54-4cb6-86e1-439a4b9a9315}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
