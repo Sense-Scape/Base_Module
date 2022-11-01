@@ -15,9 +15,11 @@ void RouterModule::RegisterOutputModule(std::shared_ptr<BaseModule> pNextModule,
         for (unsigned uNextModuleIndex = 0; uNextModuleIndex < vpNextModules.size(); uNextModuleIndex++)
         {
             if(vpNextModules[uNextModuleIndex]->GetModuleType() == pNextModule->GetModuleType())
-                std::cout << std::string(__FUNCTION__) + ": " + ModuleTypeStrings::toString(pNextModule->GetModuleType()) + " already registered, replacing \n";
+			{
+				std::cout << std::string(__FUNCTION__) + ": " + ModuleTypeStrings::toString(pNextModule->GetModuleType()) + " already registered, replacing \n";
                 vpNextModules[uNextModuleIndex] = pNextModule;
                 return;
+			}
         }
     }
     
