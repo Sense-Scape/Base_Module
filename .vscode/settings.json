@@ -1,3 +1,4 @@
 {
-	"cmake.sourceDirectory": "${workspaceFolder}/BaseModule"
+	"cmake.sourceDirectory": "${workspaceFolder}/BaseModule",
+	"C_Cpp.default.configurationProvider": "go2sh.cmake-integration"
 }

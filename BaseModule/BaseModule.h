@@ -22,7 +22,7 @@
 #include "ChunkTypesUtility.h"
 #include "ModuleTypes.h"
 #include "CircularBuffer.h"
-
+#include <condition_variable>
 /**
  * @brief Base processing class containing a threaded process and thread safe input buffer.
  *

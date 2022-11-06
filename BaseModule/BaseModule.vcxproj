@@ -80,7 +80,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/CPP_Chunk_Types</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/Chunk_Types</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,7 +95,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/CPP_Chunk_Types</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/Chunk_Types</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/CPP_Chunk_Types</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/Chunk_Types</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,7 +125,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/CPP_Chunk_Types</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SC_LIB_DIR)/Lib_Chunk_Types/Chunk_Types</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +141,11 @@
     <ClInclude Include="BaseModule.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="ModuleTypes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lib_Chunk_Types\Chunk_Types\Chunk_Types.vcxproj">
+      <Project>{5583b73c-eb54-4cb6-86e1-439a4b9a9315}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
