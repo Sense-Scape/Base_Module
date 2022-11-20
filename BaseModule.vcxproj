@@ -147,7 +147,7 @@
     <ClInclude Include="include/ModuleTypes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chunk_Types\Chunk_Types.vcxproj">
+    <ProjectReference Include="..\Chunk_Types\ChunkTypes.vcxproj">
       <Project>{5583b73c-eb54-4cb6-86e1-439a4b9a9315}</Project>
     </ProjectReference>
   </ItemGroup>
