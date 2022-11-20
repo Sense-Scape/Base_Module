@@ -14,7 +14,8 @@ enum class ModuleType
     RouterModule,
     WinUDPRxModule,
     WAVWriterModule,
-    WAVAccumulatorModule
+    WAVAccumulatorModule,
+    SimulatorModule
 };
 
 class ModuleTypeStrings
@@ -32,6 +33,7 @@ public:
         case ModuleType::ModuleBase: return "ModuleBase";
         case ModuleType::SessionProcModule: return "SessionProcModule";
         case ModuleType::RouterModule: return "RouterModule";
+        case ModuleType::SimulatorModule: return "SimulatorModule";
 
         // Network Modules
         case ModuleType::WinUDPRxModule: return "WinUDPRxModule";

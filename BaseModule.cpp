@@ -1,4 +1,4 @@
-#include "./BaseModule.h"
+#include "BaseModule.h"
 
 BaseModule::BaseModule(unsigned uMaxInputBufferSize) : 
 m_uMaxInputBufferSize(uMaxInputBufferSize),
