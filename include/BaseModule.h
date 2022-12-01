@@ -40,6 +40,7 @@ protected:
     bool m_bShutDown;                                               ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking                                   
     std::thread m_thread;                                           ///< Thread object for module processing
+    std::mutex m_ProcessStateMutex;
 
     /**
      * @brief Returns true if a message pointer had been retrieved an passed on to next module.
@@ -69,8 +70,8 @@ public:
      * @brief Construct a new Base Module object
      * @param[in] uMaxInputBufferSize size of the module input buffer
      */
-    BaseModule(unsigned uMaxInputBufferSize = 1);
-    virtual ~BaseModule() {};
+    BaseModule(unsigned uMaxInputBufferSize = 2);
+    virtual ~BaseModule();
 
     /**
      * @brief Returns module type
