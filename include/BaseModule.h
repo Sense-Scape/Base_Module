@@ -29,6 +29,49 @@
  */
 class BaseModule
 {
+
+public:
+    /**
+     * @brief Construct a new Base Module object
+     * @param[in] uMaxInputBufferSize size of the module input buffer
+     */
+    BaseModule(unsigned uMaxInputBufferSize = 1);
+    virtual ~BaseModule();
+
+    /**
+     * @brief Returns module type
+     * @param[out] ModuleType of processing module
+     */
+    virtual ModuleType GetModuleType() { return ModuleType::ModuleBase; };
+
+    /**
+     * @brief Starts the  process on its own thread
+     *
+     */
+    virtual void StartProcessing();
+
+    /**
+     * @brief Check input buffer and try process data
+     *
+     */
+    virtual void ContinuouslyTryProcess();
+
+    /**
+     * @brief Set the Next Module object to pass chunks along to
+     *
+     * @param m_NextModule pointer to the next module to pass chunk to
+     */
+    virtual void SetNextModule(std::shared_ptr<BaseModule> pNextModule);
+
+    /**
+     * @brief Recieves base chunk pointer from previous module
+     *
+     * @param pBaseChunk
+     * @return true if message was sucessfully inserted into the buffer
+     * @return false if message was unsucessfully inserted into the buffer
+     */
+    bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
+
 private:
     size_t m_uMaxInputBufferSize;               ///< Max size of the class input buffer
     bool m_bDataInBuffer;                       ///<
@@ -67,54 +110,6 @@ protected:
      */
     bool TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk);
 
-public:
-    /**
-     * @brief Construct a new Base Module object
-     * @param[in] uMaxInputBufferSize size of the module input buffer
-     */
-    BaseModule(unsigned uMaxInputBufferSize = 2);
-    virtual ~BaseModule();
-
-    /**
-     * @brief Returns module type
-     * @param[out] ModuleType of processing module
-     */
-    virtual ModuleType GetModuleType() { return ModuleType::ModuleBase; };
-
-    /**
-     * @brief Starts the  process on its own thread
-     *
-     */
-    virtual void StartProcessing();
-
-    /**
-     * @brief Check input buffer and try process data
-     *
-     */
-    virtual void ContinuouslyTryProcess();
-
-    /**
-     * @brief Set the Next Module object to pass chunks along to
-     *
-     * @param m_NextModule pointer to the next module to pass chunk to
-     */
-    virtual void SetNextModule(std::shared_ptr<BaseModule> pNextModule);
-
-    /**
-     * @brief Recieves base chunk pointer from previous module
-     *
-     * @param pBaseChunk
-     * @return true if message was sucessfully inserted into the buffer
-     * @return false if message was unsucessfully inserted into the buffer
-     */
-    bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
-
-    /**
-     * @brief Sets module input buffer size
-     *
-     * @param uSize size of uinput buffer
-     */
-    void SetBufferSize(unsigned uSize);
 };
 
 #endif
