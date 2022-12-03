@@ -32,15 +32,17 @@ class BaseModule
 private:
     size_t m_uMaxInputBufferSize;               ///< Max size of the class input buffer
     bool m_bDataInBuffer;                       ///<
-    std::condition_variable m_cvDataInBuffer;   ///<
+   
 
 protected:
+    std::condition_variable m_cvDataInBuffer;   ///<
     CircularBuffer<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     bool m_bShutDown;                                               ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking                                   
     std::thread m_thread;                                           ///< Thread object for module processing
     std::mutex m_ProcessStateMutex;
+    
 
     /**
      * @brief Returns true if a message pointer had been retrieved an passed on to next module.
@@ -106,6 +108,13 @@ public:
      * @return false if message was unsucessfully inserted into the buffer
      */
     bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
+
+    /**
+     * @brief Sets module input buffer size
+     *
+     * @param uSize size of uinput buffer
+     */
+    void SetBufferSize(unsigned uSize);
 };
 
 #endif

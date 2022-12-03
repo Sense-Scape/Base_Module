@@ -1,6 +1,6 @@
 #include "BaseModule.h"
 
-BaseModule::BaseModule(unsigned uMaxInputBufferSize) : 
+BaseModule::BaseModule(unsigned uMaxInputBufferSize = 1) : 
 m_uMaxInputBufferSize(uMaxInputBufferSize),
 m_bDataInBuffer(),
 m_cvDataInBuffer(),
@@ -100,3 +100,8 @@ bool BaseModule::TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk)
     return false;
 }
 
+void  BaseModule::SetBufferSize(unsigned uSize)
+{
+    m_uMaxInputBufferSize = uSize;
+    m_cbBaseChunkBuffer = CircularBuffer<std::shared_ptr<BaseChunk>>(uSize);
+}
