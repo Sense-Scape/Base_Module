@@ -2,7 +2,6 @@
 
 BaseModule::BaseModule(unsigned uMaxInputBufferSize) : 
 m_uMaxInputBufferSize(uMaxInputBufferSize),
-m_bDataInBuffer(),
 m_cvDataInBuffer(),
 m_cbBaseChunkBuffer(uMaxInputBufferSize),
 m_pNextModule(nullptr),
