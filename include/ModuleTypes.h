@@ -1,11 +1,10 @@
-#ifndef MODULETYPES
-#define MODULETYPES
+#ifndef MODULE_TYPES
+#define MODULE_TYPES
 
 /*Standard Includes*/
 #include <string>
 
 /*Custom Includes*/
-
 
 enum class ModuleType
 {
@@ -15,6 +14,7 @@ enum class ModuleType
     WinUDPRxModule,
     WAVWriterModule,
     WAVAccumulatorModule,
+    TimeToWavModule,
     SimulatorModule
 };
 
@@ -41,6 +41,7 @@ public:
         // WAV Modules
         case ModuleType::WAVWriterModule: return "WAVWriterModule";
         case ModuleType::WAVAccumulatorModule: return "WAVAccumulatorModule";
+        case ModuleType::TimeToWavModule: return "TimeToWavModule";
 
         default: return "Unknown Module";
         }
