@@ -15,7 +15,8 @@ enum class ModuleType
     WAVWriterModule,
     WAVAccumulatorModule,
     TimeToWavModule,
-    SimulatorModule
+    SimulatorModule,
+    HPFModule
 };
 
 class ModuleTypeStrings
@@ -42,6 +43,9 @@ public:
         case ModuleType::WAVWriterModule: return "WAVWriterModule";
         case ModuleType::WAVAccumulatorModule: return "WAVAccumulatorModule";
         case ModuleType::TimeToWavModule: return "TimeToWavModule";
+
+        // Signal Processing Modulesa
+        case ModuleType::HPFModule: return "LowPassFilterModule";
 
         default: return "Unknown Module";
         }
