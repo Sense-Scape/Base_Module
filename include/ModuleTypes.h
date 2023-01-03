@@ -12,6 +12,7 @@ enum class ModuleType
     SessionProcModule,
     RouterModule,
     WinUDPRxModule,
+    WinUDPTxModule,
     WAVWriterModule,
     WAVAccumulatorModule,
     TimeToWavModule,
@@ -37,6 +38,7 @@ public:
 
         // Network Modules
         case ModuleType::WinUDPRxModule: return "WinUDPRxModule";
+        case ModuleType::WinUDPTxModule: return "WinUDPTxModule";
         
         // WAV Modules
         case ModuleType::WAVWriterModule: return "WAVWriterModule";
