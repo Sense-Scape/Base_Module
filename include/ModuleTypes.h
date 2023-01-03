@@ -47,7 +47,7 @@ public:
         case ModuleType::TimeToWavModule: return "TimeToWavModule";
 
         // Signal Processing Modulesa
-        case ModuleType::HPFModule: return "LowPassFilterModule";
+        case ModuleType::HPFModule: return "HighPassFilterModule";
 
         default: return "Unknown Module";
         }
