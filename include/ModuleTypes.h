@@ -17,7 +17,8 @@ enum class ModuleType
     WAVAccumulatorModule,
     TimeToWavModule,
     SimulatorModule,
-    HPFModule
+    HPFModule,
+    WatchdogModule
 };
 
 class ModuleTypeStrings
@@ -48,6 +49,9 @@ public:
 
         // Signal Processing Modulesa
         case ModuleType::HPFModule: return "HighPassFilterModule";
+
+        // Status Reporting Modules
+        case ModuleType::WatchdogModule: return "WatchdogModule";
 
         default: return "Unknown Module";
         }
