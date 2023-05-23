@@ -15,6 +15,7 @@
 #include <thread>
 #include <queue>
 #include <vector>
+#include <chrono>
 
 /* Custom Includes */
 #include "BaseChunk.h"
@@ -68,14 +69,20 @@ public:
      */
     bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
 
+    void TrackProcessTime(bool bTrackTime , std::string sTrackerMessage);
+
 private:
     size_t m_uMaxInputBufferSize;                                   ///< Max size of the class input buffer
+    std::atomic<bool> m_bTrackProcessTime = false;
+    std::string m_sTrackerMessage = "";
+    std::chrono::high_resolution_clock::time_point m_CurrentTime; 
+    std::chrono::high_resolution_clock::time_point m_PreviousTime;
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
     CircularBuffer<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
-    bool m_bShutDown;                                               ///< Whether to try continuously process
+    std::atomic<bool> m_bShutDown;                                               ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking                                   
     std::thread m_thread;                                           ///< Thread object for module processing
     std::mutex m_ProcessStateMutex;                                 ///< Mutex controlling access shut down variable

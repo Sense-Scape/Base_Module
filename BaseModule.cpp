@@ -24,13 +24,8 @@ void BaseModule::Process(std::shared_ptr<BaseChunk> pBaseChunk)
 
 void BaseModule::ContinuouslyTryProcess()
 {
-    
-    std::unique_lock<std::mutex> ProcessLock(m_ProcessStateMutex);
-
     while (!m_bShutDown)
     {
-        ProcessLock.unlock();
-
         std::shared_ptr<BaseChunk> pBaseChunk;
         if (TakeFromBuffer(pBaseChunk))
             Process(pBaseChunk);
@@ -40,8 +35,6 @@ void BaseModule::ContinuouslyTryProcess()
             std::unique_lock<std::mutex> BufferAccessLock(m_BufferStateMutex);
             m_cvDataInBuffer.wait(BufferAccessLock, [this] {return (!m_cbBaseChunkBuffer.empty() || m_bShutDown);});
         }
-
-        ProcessLock.lock();
     }
 }
 
@@ -58,6 +51,18 @@ void BaseModule::SetNextModule(std::shared_ptr<BaseModule> pNextModule)
 
 bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
 {
+    // Lets first check we are doing timing debugging
+    if (m_bTrackProcessTime)
+    {
+        // if so print the last time since we passed a message. This should give us an estimate of how
+        // long the module is taking to process
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_CurrentTime - m_PreviousTime);
+        std::cout << m_sTrackerMessage + ": Time between passing chunks = " + std::to_string(duration.count()) + "us" << std::endl;
+
+        m_PreviousTime = m_CurrentTime;
+        m_CurrentTime = std::chrono::high_resolution_clock::now();
+    }
+    
     // Allow module that one is passing to to facilitate its own locking procedures
     if (m_pNextModule != nullptr)
         return m_pNextModule->TakeChunkFromModule(pBaseChunk);
@@ -97,4 +102,14 @@ bool BaseModule::TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk)
     }
 
     return false;
+}
+
+void BaseModule::TrackProcessTime(bool bTrackTime, std::string sTrackerMessage)
+{
+    // Update tracking states
+    m_sTrackerMessage = sTrackerMessage;
+    m_bTrackProcessTime = bTrackTime;
+    // Then start the timers
+    m_PreviousTime = std::chrono::high_resolution_clock::now();
+    m_CurrentTime = std::chrono::high_resolution_clock::now();
 }
