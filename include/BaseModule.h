@@ -85,7 +85,6 @@ protected:
     std::atomic<bool> m_bShutDown;                                               ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking                                   
     std::thread m_thread;                                           ///< Thread object for module processing
-    std::mutex m_ProcessStateMutex;                                 ///< Mutex controlling access shut down variable
     
 
     /**
