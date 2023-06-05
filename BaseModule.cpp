@@ -1,11 +1,11 @@
 #include "BaseModule.h"
 
 BaseModule::BaseModule(unsigned uMaxInputBufferSize) : 
-m_uMaxInputBufferSize(uMaxInputBufferSize),
-m_cvDataInBuffer(),
-m_cbBaseChunkBuffer(uMaxInputBufferSize),
-m_pNextModule(nullptr),
-m_bShutDown()
+    m_uMaxInputBufferSize(uMaxInputBufferSize),
+    m_cvDataInBuffer(),
+    m_cbBaseChunkBuffer(uMaxInputBufferSize),
+    m_pNextModule(nullptr),
+    m_bShutDown()
 {
 }
 

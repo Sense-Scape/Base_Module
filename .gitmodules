@@ -1,3 +1,9 @@
 [submodule "submodules/Lib_Chunk_Types"]
 	path = submodules/Lib_Chunk_Types
 	url = https://github.com/Sense-Scape/Lib_Chunk_Types.git
+[submodule "components/doctest"]
+	path = components/doctest
+	url = https://github.com/Sense-Scape/doctest.git
+[submodule "components/Chunk_Types"]
+	path = components/Chunk_Types
+	url = https://github.com/Sense-Scape/Chunk_Types.git
