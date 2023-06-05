@@ -6,7 +6,10 @@
 
 TEST_CASE("BaseModule Test") 
 {
-    CHECK(1 == 1);
+    unsigned uBufferLength = 10;
+    BaseModule baseModule(uBufferLength);
+
+    CHECK(baseModule.GetModuleType() == ModuleType::ModuleBase);
 }
 
 #endif
