@@ -6,14 +6,6 @@ This repository aims to implement the foundations of a generic modular multithre
 encapsulate processing functionality into each module. Modules are connected to one another forming a processing pipeline. Each module 
 will operate on different chunk types as described by [this](https://github.com/Sense-Scape/Chunk_Types) repository.
 
-## Base Module
-
-TODO: Add description
-
-## Router Module
-
-TODO: Add description
-
 ## Getting Started
 
 One should first pull this repository and update the submodules as it does required the DocTest header to build. 
