@@ -23,7 +23,7 @@
 #include "ModuleTypes.h"
 #include "CircularBuffer.h"
 
-/**
+/*
  * @brief Base processing class containing a threaded process 
  *          to pass on chunks and thread safe input buffer.
  */
@@ -31,36 +31,36 @@ class BaseModule
 {
 
 public:
-    /**
+    /*
      * @brief Construct a new Base Module object
      * @param[in] uMaxInputBufferSize size of the module input buffer
      */
     BaseModule(unsigned uMaxInputBufferSize = 1);
     virtual ~BaseModule();
 
-    /**
+    /*
      * @brief Returns module type
      * @param[out] ModuleType of processing module
      */
     virtual ModuleType GetModuleType() { return ModuleType::ModuleBase; };
 
-    /**
+    /*
      * @brief Starts the  process on its own thread
      */
     virtual void StartProcessing();
 
-    /**
+    /*
      * @brief Check input buffer and try process data
      */
     virtual void ContinuouslyTryProcess();
 
-    /**
+    /*
      * @brief Set the Next Module object to pass chunks along to
      * @param[in] m_NextModule pointer to the next module to pass chunk to
      */
     virtual void SetNextModule(std::shared_ptr<BaseModule> pNextModule);
 
-    /**
+    /*
      * @brief Recieves base chunk pointer from previous module
      * @param[in] pBaseChunk pointer to base chunk
      * @return True if message was sucessfully inserted into the buffer
@@ -68,12 +68,22 @@ public:
      */
     bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
 
-    /**
+    /*
     *  @brief tacks time between consecutive chunk passes
     *  @param[in] Boolean as to whether to track and log the processing time
     *  @param[in] String log message
     */
     void TrackProcessTime(bool bTrackTime , std::string sTrackerMessage);
+
+    /*
+    * @brief used to test the processing of a particular module
+    * @param[in] pBaseChunk Pointer to base chuk
+    */
+    void TestProcess(std::shared_ptr<BaseChunk> pBaseChunk);
+
+    void SetTestMode(bool bTestModeState);
+
+    std::shared_ptr<BaseChunk> GetTestOutput();
 
 private:
     size_t m_uMaxInputBufferSize;                                   ///< Max size of the class input buffer
@@ -81,6 +91,9 @@ private:
     std::string m_sTrackerMessage = "";                             ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTime;  ///< Final time used to track time between consecutive chunk passes
+
+    bool m_bTestMode;
+    std::shared_ptr<BaseChunk> m_pTestChunkOutput;
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer

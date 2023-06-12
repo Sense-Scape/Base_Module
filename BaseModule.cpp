@@ -64,10 +64,14 @@ bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     }
     
     // Allow module that one is passing to to facilitate its own locking procedures
+    bool bReturnSuccessful = false;
+
     if (m_pNextModule != nullptr)
-        return m_pNextModule->TakeChunkFromModule(pBaseChunk);
-    else
-        return false;
+        bReturnSuccessful = m_pNextModule->TakeChunkFromModule(pBaseChunk);
+    else if (m_bTestMode)
+        m_pTestChunkOutput = pBaseChunk;
+
+    return bReturnSuccessful;
 }
 
 bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
@@ -112,4 +116,19 @@ void BaseModule::TrackProcessTime(bool bTrackTime, std::string sTrackerMessage)
     // Then start the timers
     m_PreviousTime = std::chrono::high_resolution_clock::now();
     m_CurrentTime = std::chrono::high_resolution_clock::now();
+}
+
+void BaseModule::TestProcess(std::shared_ptr<BaseChunk> pBaseChunk)
+{
+    Process(pBaseChunk);
+}
+
+std::shared_ptr<BaseChunk> BaseModule::GetTestOutput()
+{
+    return std::move(m_pTestChunkOutput);
+}
+
+void BaseModule::SetTestMode(bool bTestModeState)
+{
+    m_bTestMode = bTestModeState;
 }
