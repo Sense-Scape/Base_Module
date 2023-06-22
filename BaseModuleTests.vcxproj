@@ -59,36 +59,52 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="BaseModuleTests.props" />
+    <Import Project="BaseModule.props" />
+    <Import Project="components\doctest\doctest.props" />
+    <Import Project="components\Chunk_Types\ChunkTypes.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="BaseModuleTests.props" />
+    <Import Project="BaseModule.props" />
+    <Import Project="components\doctest\doctest.props" />
+    <Import Project="components\Chunk_Types\ChunkTypes.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="components\doctest\doctest.props" />
+    <Import Project="components\Chunk_Types\ChunkTypes.props" />
+    <Import Project="BaseModule.props" />
+    <Import Project="BaseModuleTests.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="BaseModuleTests.props" />
+    <Import Project="BaseModule.props" />
+    <Import Project="components\doctest\doctest.props" />
+    <Import Project="components\Chunk_Types\ChunkTypes.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)_tests\</OutDir>
     <IntDir>$(Configuration)_tests\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\components\doctest\doctest;$(ProjectDir)\tests;$(ProjectDir)\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\components\doctest\doctest;$(ProjectDir)\tests;$(ProjectDir)\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)_tests\</OutDir>
     <IntDir>$(Platform)\$(Configuration)_tests\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\components\doctest\doctest;$(ProjectDir)\tests;$(ProjectDir)\include;$(ProjectDir)components/Chunk_Types/include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)_tests\</OutDir>
     <IntDir>$(Platform)\$(Configuration)_tests\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\components\doctest\doctest;$(ProjectDir)\tests;$(ProjectDir)\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(MSBuildThisFileDirectory)include\;$(IncludePath);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)_tests\</OutDir>
     <IntDir>$(Configuration)_tests\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\components\doctest\doctest;$(ProjectDir)\tests;$(ProjectDir)\include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(MSBuildThisFileDirectory)include\;$(IncludePath);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -147,18 +163,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseModuleTest.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Tests\BaseModuleTests.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="BaseModule.vcxproj">
       <Project>{36fd5345-1eb3-4a92-8f96-a07cc3fa8e32}</Project>
     </ProjectReference>
     <ProjectReference Include="components\Chunk_Types\ChunkTypes.vcxproj">
       <Project>{5583b73c-eb54-4cb6-86e1-439a4b9a9315}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include_tests\BaseModuleTests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source_tests\BaseModuleTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
