@@ -18,7 +18,8 @@ enum class ModuleType
     TimeToWavModule,
     SimulatorModule,
     HPFModule,
-    WatchdogModule
+    WatchdogModule,
+    WinTCPRxModule
 };
 
 class ModuleTypeStrings
