@@ -19,7 +19,9 @@ enum class ModuleType
     SimulatorModule,
     HPFModule,
     WatchdogModule,
-    WinTCPRxModule
+    WinTCPRxModule,
+    WinTCPTxModule,
+    ChunkToBytesModule
 };
 
 class ModuleTypeStrings
@@ -33,11 +35,12 @@ public:
     {
         switch (eModuleType)
         {
-        // Core Modules
+        // Generic Modules
         case ModuleType::ModuleBase: return "ModuleBase";
         case ModuleType::SessionProcModule: return "SessionProcModule";
         case ModuleType::RouterModule: return "RouterModule";
         case ModuleType::SimulatorModule: return "SimulatorModule";
+        case ModuleType::ChunkToBytesModule: return "ChunkToBytesModule";
 
         // Network Modules
         case ModuleType::WinUDPRxModule: return "WinUDPRxModule";
