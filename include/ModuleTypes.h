@@ -21,7 +21,8 @@ enum class ModuleType
     WatchdogModule,
     WinTCPRxModule,
     WinTCPTxModule,
-    ChunkToBytesModule
+    ChunkToBytesModule,
+    ToJSONModule
 };
 
 class ModuleTypeStrings
