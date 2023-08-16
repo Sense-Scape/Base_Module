@@ -58,18 +58,22 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="BaseModule.props" />
     <Import Project="components\Chunk_Types\ChunkTypes.props" />
+    <Import Project="components\Chunk_Types\components\Nlohmann_JSON\Nlohmann_JSON.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="BaseModule.props" />
     <Import Project="components\Chunk_Types\ChunkTypes.props" />
+    <Import Project="components\Chunk_Types\components\Nlohmann_JSON\Nlohmann_JSON.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="BaseModule.props" />
     <Import Project="components\Chunk_Types\ChunkTypes.props" />
+    <Import Project="components\Chunk_Types\components\Nlohmann_JSON\Nlohmann_JSON.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="BaseModule.props" />
     <Import Project="components\Chunk_Types\ChunkTypes.props" />
+    <Import Project="components\Chunk_Types\components\Nlohmann_JSON\Nlohmann_JSON.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -154,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BaseModule.cpp" />
-    <ClCompile Include="source\RouterModule.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

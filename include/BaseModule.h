@@ -19,8 +19,8 @@
 
 /* Custom Includes */
 #include "BaseChunk.h"
-#include "ChunkTypesUtility.h"
 #include "ModuleTypes.h"
+#include "ChunkTypesNamingUtility.h"
 #include "CircularBuffer.h"
 
 /*
