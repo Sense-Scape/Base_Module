@@ -163,18 +163,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include_tests\BaseModuleTests.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source_tests\BaseModuleTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="BaseModule.vcxproj">
       <Project>{36fd5345-1eb3-4a92-8f96-a07cc3fa8e32}</Project>
     </ProjectReference>
     <ProjectReference Include="components\Chunk_Types\ChunkTypes.vcxproj">
       <Project>{5583b73c-eb54-4cb6-86e1-439a4b9a9315}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include_tests\BaseModuleTests.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="source_tests\BaseModuleTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
