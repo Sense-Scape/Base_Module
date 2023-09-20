@@ -45,9 +45,14 @@ public:
     virtual ModuleType GetModuleType() { return ModuleType::ModuleBase; };
 
     /*
-     * @brief Starts the  process on its own thread
+     * @brief Starts the process on its own thread
      */
     virtual void StartProcessing();
+
+    /*
+     * @brief stops the process on its own thread
+     */
+    virtual void StopProcessing();
 
     /*
      * @brief Check input buffer and try process data
