@@ -40,8 +40,16 @@ void BaseModule::ContinuouslyTryProcess()
 
 void BaseModule::StartProcessing()
 {
-    m_thread = std::thread([this]()
-        { ContinuouslyTryProcess(); });
+    if (!m_thread.joinable())
+        m_thread = std::thread([this]()
+            { ContinuouslyTryProcess(); });
+    else
+        std::cout << "Error: Base module already processing" << std::endl;
+}
+
+void BaseModule::StopProcessing()
+{
+    m_bShutDown = true;
 }
 
 void BaseModule::SetNextModule(std::shared_ptr<BaseModule> pNextModule)
