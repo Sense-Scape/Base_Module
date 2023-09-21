@@ -22,6 +22,8 @@
 #include "ModuleTypes.h"
 #include "ChunkTypesNamingUtility.h"
 #include "CircularBuffer.h"
+#include <plog/Log.h>
+#include "plog/Initializers/RollingFileInitializer.h"
 
 /*
  * @brief Base processing class containing a threaded process 

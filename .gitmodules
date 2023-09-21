@@ -7,3 +7,6 @@
 [submodule "components/Chunk_Types"]
 	path = components/Chunk_Types
 	url = https://github.com/Sense-Scape/Chunk_Types.git
+[submodule "components/plog"]
+	path = components/plog
+	url = https://github.com/Sense-Scape/plog.git
