@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaseModuleTests", "BaseModuleTests.vcxproj", "{81828112-BA20-42B1-8CB3-E2FE584BDDE4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BaseModule", "BaseModule.vcxproj", "{36FD5345-1EB3-4A92-8F96-A07CC3FA8E32}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5583B73C-EB54-4CB6-86E1-439A4B9A9315} = {5583B73C-EB54-4CB6-86E1-439A4B9A9315}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChunkTypes", "components\Chunk_Types\ChunkTypes.vcxproj", "{5583B73C-EB54-4CB6-86E1-439A4B9A9315}"
 EndProject

@@ -44,7 +44,10 @@ void BaseModule::StartProcessing()
         m_thread = std::thread([this]()
             { ContinuouslyTryProcess(); });
     else
-        std::cout << "Error: Base module already processing" << std::endl;
+    {
+        PLOG_WARNING << __FUNCTION__ << ": Processing thread already started";
+        assert(true && m_bTestMode);
+    }
 }
 
 void BaseModule::StopProcessing()
