@@ -22,7 +22,8 @@ enum class ModuleType
     WinTCPRxModule,
     WinTCPTxModule,
     ChunkToBytesModule,
-    ToJSONModule
+    ToJSONModule,
+    FFTModule
 };
 
 class ModuleTypeStrings
