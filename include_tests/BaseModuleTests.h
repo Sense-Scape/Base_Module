@@ -7,7 +7,7 @@
 TEST_CASE("BaseModule Test") 
 {
     // First we set up logging so we can see what is going on
-    plog::init(plog::debug, "BaseModuleTestLogs.txt", 10000);
+    plog::init(plog::info, "BaseModuleTestLogs.txt", 10000);
 
     unsigned uBufferLength = 10;
     BaseModule baseModule(uBufferLength);
@@ -23,7 +23,7 @@ TEST_CASE("BaseModule Test")
     }
     
 
-    PLOG_INFO << __FUNCTION__ << "Stating to checj if one can try repeatedly start module and stop it";
+    PLOG_INFO << __FUNCTION__ << "Stating to check if one can try repeatedly start module and stop it";
     SUBCASE("Checking if one can try repeatedly start module and stop it")
     {
         // If this fails I will never get to the check

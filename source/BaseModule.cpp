@@ -11,11 +11,12 @@ BaseModule::BaseModule(unsigned uMaxInputBufferSize) :
 
 BaseModule::~BaseModule()
 {
-    // TODO: finish implementation
+    // Stop all processing
+    m_bShutDown = true;
+
+    // Then we can try close the threads
     if(m_thread.joinable())
-    {
         m_thread.join();
-    }
 }
 void BaseModule::Process(std::shared_ptr<BaseChunk> pBaseChunk)
 {
@@ -45,7 +46,10 @@ void BaseModule::StartProcessing()
             { ContinuouslyTryProcess(); });
     else
     {
-        PLOG_WARNING << __FUNCTION__ << ": Processing thread already started";
+        // Log warning
+        std::string strWarning = std::string(__FUNCTION__) + ": Processing thread already started";
+        PLOG_WARNING << strWarning;
+        // And force a crash if in debug and not release
         assert(true && m_bTestMode);
     }
 }
@@ -67,8 +71,9 @@ bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     {
         // if so print the last time since we passed a message. This should give us an estimate of how
         // long the module is taking to process
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(m_CurrentTime - m_PreviousTime);
-        std::cout << m_sTrackerMessage + ": Time between passing chunks = " + std::to_string(duration.count()) + "us" << std::endl;
+        auto duration = std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(m_CurrentTime - m_PreviousTime).count());
+        std::string strInfo = std::string(__FUNCTION__) + m_sTrackerMessage + ": Time between passing chunks = " + duration + "us";
+        PLOG_INFO << strInfo;
 
         m_PreviousTime = m_CurrentTime;
         m_CurrentTime = std::chrono::high_resolution_clock::now();
@@ -99,6 +104,7 @@ bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
         bChunkPassed = true;
     }
 
+    // Then release and tell everyone we done
     BufferStateLock.unlock();
     m_cvDataInBuffer.notify_all();
     return bChunkPassed;
@@ -136,7 +142,14 @@ void BaseModule::TestProcess(std::shared_ptr<BaseChunk> pBaseChunk)
 
 std::shared_ptr<BaseChunk> BaseModule::GetTestOutput()
 {
-    return std::move(m_pTestChunkOutput);
+    if (m_pTestChunkOutput != nullptr)
+        return std::move(m_pTestChunkOutput);
+    else
+    {
+        std::string strError = std::string(__FUNCTION__) + " No test chunk output to return";
+        PLOG_ERROR << strError;
+        throw;
+    }
 }
 
 void BaseModule::SetTestMode(bool bTestModeState)

@@ -88,8 +88,16 @@ public:
     */
     void TestProcess(std::shared_ptr<BaseChunk> pBaseChunk);
 
+    /*
+    * @brief Puts the module into a test mode where a single chunk will be processed and returned when requested
+    * @param[in] Boolean as to whethere the module should be in test mode
+    */
     void SetTestMode(bool bTestModeState);
 
+    /*
+    * @brief If the mo
+    * @param[in] Boolean as to whethere the module should be in test mode
+    */
     std::shared_ptr<BaseChunk> GetTestOutput();
 
 private:
@@ -99,8 +107,8 @@ private:
     std::chrono::high_resolution_clock::time_point m_CurrentTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTime;  ///< Final time used to track time between consecutive chunk passes
 
-    bool m_bTestMode;
-    std::shared_ptr<BaseChunk> m_pTestChunkOutput;
+    bool m_bTestMode;                                               ///< Boolean as to whether the module is doing doing normal processing or test processing
+    std::shared_ptr<BaseChunk> m_pTestChunkOutput;                  ///< Member used to store test outputs  
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
