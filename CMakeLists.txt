@@ -1,6 +1,5 @@
-
 # Min CMake version
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.18)
 
 set(SOURCE_DIR "source")
 set(INCLUDE_DIR "include")
