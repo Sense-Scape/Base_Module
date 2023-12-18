@@ -34,7 +34,7 @@ void BaseModule::ContinuouslyTryProcess()
         {
             // Wait to be notified that there is data available
             std::unique_lock<std::mutex> BufferAccessLock(m_BufferStateMutex);
-            m_cvDataInBuffer.wait(BufferAccessLock, [this] {return (!m_cbBaseChunkBuffer.empty() || m_bShutDown);});
+            m_cvDataInBuffer.wait_for(BufferAccessLock, std::chrono::milliseconds(1),  [this] {return (!m_cbBaseChunkBuffer.empty() || m_bShutDown);});
         }
     }
 }
