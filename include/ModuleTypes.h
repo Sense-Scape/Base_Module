@@ -25,7 +25,8 @@ enum class ModuleType
     ToJSONModule,
     FFTModule,
     WinMultiClientTCPRxModule,
-    WinMultiClientTCPTxModule
+    WinMultiClientTCPTxModule,
+    LinuxMultiClientTCPTxModule
 };
 
 class ModuleTypeStrings
@@ -60,6 +61,8 @@ public:
 
         // Status Reporting Modules
         case ModuleType::WatchdogModule: return "WatchdogModule";
+
+        case ModuleType::LinuxMultiClientTCPTxModule: return "LinuxMultiClientTCPTxModule";
 
         default: return "Unknown Module";
         }
