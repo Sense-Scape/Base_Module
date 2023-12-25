@@ -26,7 +26,8 @@ enum class ModuleType
     FFTModule,
     WinMultiClientTCPRxModule,
     WinMultiClientTCPTxModule,
-    LinuxMultiClientTCPTxModule
+    LinuxMultiClientTCPTxModule,
+    SoundCardInterfaceModule
 };
 
 class ModuleTypeStrings
@@ -62,7 +63,9 @@ public:
         // Status Reporting Modules
         case ModuleType::WatchdogModule: return "WatchdogModule";
 
+        // Linux Modules
         case ModuleType::LinuxMultiClientTCPTxModule: return "LinuxMultiClientTCPTxModule";
+        case ModuleType::SoundCardInterfaceModule: return "SoundCardInterfaceModule";
 
         default: return "Unknown Module";
         }
