@@ -21,45 +21,34 @@ The Doctest library has been branched into this organisation. **Note** that this
 
 ### Linux
 
-There is currently no support for linux but there is an intention to add it when required.
+- Building is controlled using cmake
+- Create a build directory using `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
 
 ## Repository Structure
 
-``` mermaid
+``` text
 
-flowchart TD
+├───include
+├───include_tests
+├───source
+├───source_tests
+|         
+├───components
+    ├───Chunk_Types
+    │   │  
+    │   ├───components
+    │   │   ├───doctest
+    │   │   └───Nlohmann_JSON
+    │   │  
+    │   ├───include
+    │   ├───include_tests
+    │   ├───source
+    │   ├───source_tests
+    │  
+    ├───doctest 
+    └───plog
 
-    subgraph BaseModule
-
-        subgraph Components_BM
-
-            subgraph BaseChunk
-
-                subgraph Components_BC
-                
-                    subgraph DocTest
-
-                    end
-
-                    subgraph Nlohmann_JSON
-
-                    end
-
-                end
-                
-            end
-
-            
-
-            subgraph Plog
-            end
-
-
-            subgraph doctest
-            end
-
-        end
-
-    end
 ```
-
