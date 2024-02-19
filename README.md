@@ -19,15 +19,36 @@ The Doctest library has been branched into this organisation. **Note** that this
 - Run the build command
 - One should get an executable test file as well as a `.lib` file
 
-### ESP32
-
-- Ensure one has [VSCode](https://code.visualstudio.com/download) downloaded
-- Download ESP-IDF (V5.0)
-- Once downloaded, open the ESP-IDF terminal and run the ```code``` command, VSCode should open, you may make adjustments as you please
-- Navigate to the folder contain this code and run the ```idf.py build``` command
-- This should build the code for the ESP32
-
 ### Linux
 
-There is currently no support for linux but there is an intention to add it when required.
+- Building is controlled using cmake
+- Create a build directory using `mkdir build`
+- `cd build`
+- `cmake ..`
+- `make`
 
+## Repository Structure
+
+``` text
+
+├───include
+├───include_tests
+├───source
+├───source_tests
+|         
+├───components
+    ├───Chunk_Types
+    │   │  
+    │   ├───components
+    │   │   ├───doctest
+    │   │   └───Nlohmann_JSON
+    │   │  
+    │   ├───include
+    │   ├───include_tests
+    │   ├───source
+    │   ├───source_tests
+    │  
+    ├───doctest 
+    └───plog
+
+```
