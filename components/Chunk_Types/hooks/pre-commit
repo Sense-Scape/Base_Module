@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo Building ChunkTypes
+MSBuild.exe .\\ChunkTypes.sln
+
+echo Running tests
+.\\x64\\Debug_tests\\ChunkTypesTest.exe
+
+echo Done
