@@ -1,10 +1,32 @@
 #include "CoordinateChunk.h"
 
 CoordinateChunk::CoordinateChunk() :
-    BaseChunk()
+    BaseChunk(),
+    m_dLatitude(0),
+    m_dLongitude(0),
+    m_i64TimeStamp(0)
 {
     
 }
+
+CoordinateChunk::CoordinateChunk(std::shared_ptr<CoordinateChunk> pCoordinateChunk) :
+    BaseChunk(pCoordinateChunk)
+{
+    // untested
+    m_i64TimeStamp = pCoordinateChunk->m_i64TimeStamp;
+    m_dLongitude = pCoordinateChunk->m_dLongitude;
+    m_dLatitude = pCoordinateChunk->m_dLatitude;
+}
+
+CoordinateChunk::CoordinateChunk(const CoordinateChunk &coordinateChunk) :
+    BaseChunk(coordinateChunk)
+{
+    // untested
+    m_i64TimeStamp = coordinateChunk.m_i64TimeStamp;
+    m_dLongitude = coordinateChunk.m_dLongitude;
+    m_dLatitude = coordinateChunk.m_dLatitude;
+}
+
 
 unsigned CoordinateChunk::GetSize()
 {

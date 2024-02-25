@@ -23,6 +23,18 @@ public:
     CoordinateChunk();
 
     /**
+     * @brief Copy constrtuctor for the FFT chunk
+     * @param[in] FFTChunk reference
+     */
+    CoordinateChunk(const CoordinateChunk &coordinateChunk);
+
+    /**
+     * @brief Copy constrtuctor for the FFT chunk
+     * @param[in] Shared pointer to FFT chunk
+     */
+    CoordinateChunk(std::shared_ptr<CoordinateChunk> pCoordinateChunk);
+
+    /**
      * @brief Get the Chunk Type object
      * @return[in] ChunkType of chunk
      */
