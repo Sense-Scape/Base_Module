@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -183,6 +183,7 @@
     <ClInclude Include="include/ChunkTypes.h" />
     <ClInclude Include="include\ChunkTypesNamingUtility.h" />
     <ClInclude Include="include/TimeChunk.h" />
+    <ClInclude Include="include\CoordinateChunk.h" />
     <ClInclude Include="include\SessionController.h" />
     <ClInclude Include="include\ByteChunk.h" />
     <ClInclude Include="include/WAVChunk.h" />
@@ -195,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BaseChunk.cpp" />
+    <ClCompile Include="source\CoordinateChunk.cpp" />
     <ClCompile Include="source\FFTChunk.cpp" />
     <ClCompile Include="source\FFTMagnitudeChunk.cpp" />
     <ClCompile Include="source\JSONChunk.cpp" />

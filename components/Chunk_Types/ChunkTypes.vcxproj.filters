@@ -54,6 +54,9 @@
     <ClInclude Include="include\ByteChunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\CoordinateChunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\BaseChunk.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\ByteChunk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CoordinateChunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

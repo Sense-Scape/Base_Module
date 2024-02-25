@@ -28,6 +28,7 @@ enum class ChunkType
     JSONChunk,
     FFTChunk,
     FFTMagnitudeChunk,
+    CoordinateChunk
 };
 
 #endif

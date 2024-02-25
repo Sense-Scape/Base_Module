@@ -10,11 +10,26 @@
 	This should then be run to check the chunk
 	functionality
 */
-#include "SessionControllerTests.h"
+
+// B
 #include "BaseChunkTests.h"
-#include "TimeChunkTests.h"
-#include "WAVChunkTests.h"
-#include "JSONChunkTests.h"
-#include "WatchdogChunkTests.h"
-#include "FFTChunkTests.h"
+
+// C
 #include "ChunkDuplicatorUtilityTests.h"
+#include "CoordinateChunkTests.h"
+
+// F
+#include "FFTChunkTests.h"
+
+// J
+#include "JSONChunkTests.h"
+
+// S
+#include "SessionControllerTests.h"
+
+// T
+#include "TimeChunkTests.h"
+
+// W
+#include "WAVChunkTests.h"
+#include "WatchdogChunkTests.h"
