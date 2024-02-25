@@ -167,6 +167,7 @@
     <ClInclude Include="include\JSONChunkTests.h" />
     <ClInclude Include="include_tests\BaseChunkTests.h" />
     <ClInclude Include="include_tests\ChunkDuplicatorUtilityTests.h" />
+    <ClInclude Include="include_tests\CoordinateChunkTests.h" />
     <ClInclude Include="include_tests\FFTChunkMagnitudeTests.h" />
     <ClInclude Include="include_tests\FFTChunkTests.h" />
     <ClInclude Include="include_tests\SessionControllerTests.h" />
