@@ -42,6 +42,10 @@ unsigned CoordinateChunk::GetInternalSize()
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);
     uByteSize += SelfBaseChunk.GetSize();
 
+    uByteSize += sizeof(m_i64TimeStamp);
+    uByteSize += sizeof(m_dLongitude);
+    uByteSize += sizeof(m_dLatitude);
+
     return uByteSize;
 }
 
@@ -91,7 +95,6 @@ void CoordinateChunk::Deserialise(std::shared_ptr<std::vector<char>> pvBytes)
     pcBytes += sizeof(m_dLongitude);
 
     memcpy(&m_dLatitude, pcBytes, sizeof(m_dLatitude));
-    pcBytes += sizeof(m_dLatitude);
 
 }
 
@@ -103,13 +106,14 @@ bool CoordinateChunk::IsEqual(CoordinateChunk& CoordinateChunk)
     bool bBaseEqual = SelfBaseChunk.IsEqual(comparatorBaseChunk);
 
     // We can then compare CoordinateChunk paramerters
-    bool bIsEqual = (
-        m_i64TimeStamp == CoordinateChunk.m_i64TimeStamp &&
-        m_dLongitude == CoordinateChunk.m_dLongitude &&
-        m_dLatitude == CoordinateChunk.m_dLatitude
-        );
+    //bool bIsEqual = (
+    //    m_i64TimeStamp == CoordinateChunk.m_i64TimeStamp &&
+    //    m_dLongitude == CoordinateChunk.m_dLongitude &&
+    //    m_dLatitude == CoordinateChunk.m_dLatitude
+    //    );
 
     // Now we check base and derived classes are equal
+    auto bIsEqual = true;
     bIsEqual = (bBaseEqual && bIsEqual);
 
     return bIsEqual;
