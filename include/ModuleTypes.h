@@ -27,13 +27,13 @@ enum class ModuleType
     WinMultiClientTCPRxModule,
     WinMultiClientTCPTxModule,
     LinuxMultiClientTCPTxModule,
-    SoundCardInterfaceModule
+    SoundCardInterfaceModule,
+    LinuxMultiClientTCPRxModule
 };
 
 class ModuleTypeStrings
 {
 public:
-
     ModuleTypeStrings() {};
     ~ModuleTypeStrings() {};
 
@@ -41,33 +41,50 @@ public:
     {
         switch (eModuleType)
         {
-        // Generic Modules
-        case ModuleType::ModuleBase: return "ModuleBase";
-        case ModuleType::SessionProcModule: return "SessionProcModule";
-        case ModuleType::RouterModule: return "RouterModule";
-        case ModuleType::SimulatorModule: return "SimulatorModule";
-        case ModuleType::ChunkToBytesModule: return "ChunkToBytesModule";
+            // Generic Modules
+        case ModuleType::ModuleBase:
+            return "ModuleBase";
+        case ModuleType::SessionProcModule:
+            return "SessionProcModule";
+        case ModuleType::RouterModule:
+            return "RouterModule";
+        case ModuleType::SimulatorModule:
+            return "SimulatorModule";
+        case ModuleType::ChunkToBytesModule:
+            return "ChunkToBytesModule";
 
-        // Network Modules
-        case ModuleType::WinUDPRxModule: return "WinUDPRxModule";
-        case ModuleType::WinUDPTxModule: return "WinUDPTxModule";
-        
-        // WAV Modules
-        case ModuleType::WAVWriterModule: return "WAVWriterModule";
-        case ModuleType::WAVAccumulatorModule: return "WAVAccumulatorModule";
-        case ModuleType::TimeToWavModule: return "TimeToWavModule";
+            // Network Modules
+        case ModuleType::WinUDPRxModule:
+            return "WinUDPRxModule";
+        case ModuleType::WinUDPTxModule:
+            return "WinUDPTxModule";
 
-        // Signal Processing Modulesa
-        case ModuleType::HPFModule: return "HighPassFilterModule";
+            // WAV Modules
+        case ModuleType::WAVWriterModule:
+            return "WAVWriterModule";
+        case ModuleType::WAVAccumulatorModule:
+            return "WAVAccumulatorModule";
+        case ModuleType::TimeToWavModule:
+            return "TimeToWavModule";
 
-        // Status Reporting Modules
-        case ModuleType::WatchdogModule: return "WatchdogModule";
+            // Signal Processing Modulesa
+        case ModuleType::HPFModule:
+            return "HighPassFilterModule";
 
-        // Linux Modules
-        case ModuleType::LinuxMultiClientTCPTxModule: return "LinuxMultiClientTCPTxModule";
-        case ModuleType::SoundCardInterfaceModule: return "SoundCardInterfaceModule";
+            // Status Reporting Modules
+        case ModuleType::WatchdogModule:
+            return "WatchdogModule";
 
-        default: return "Unknown Module";
+            // Linux Modules
+        case ModuleType::LinuxMultiClientTCPTxModule:
+            return "LinuxMultiClientTCPTxModule";
+        case ModuleType::SoundCardInterfaceModule:
+            return "SoundCardInterfaceModule";
+        case ModuleType::LinuxMultiClientTCPRxModule:
+            return "LinuxMultiClientTCPRxModule";
+
+        default:
+            return "Unknown Module";
         }
     }
 };
