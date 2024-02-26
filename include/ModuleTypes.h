@@ -28,14 +28,15 @@ enum class ModuleType
     WinMultiClientTCPTxModule,
     LinuxMultiClientTCPTxModule,
     SoundCardInterfaceModule,
-    LinuxMultiClientTCPRxModule
+    LinuxMultiClientTCPRxModule,
+    LinuxWAVWriterModule
 };
 
 class ModuleTypeStrings
 {
 public:
-    ModuleTypeStrings() {};
-    ~ModuleTypeStrings() {};
+    ModuleTypeStrings(){};
+    ~ModuleTypeStrings(){};
 
     static std::string toString(ModuleType eModuleType)
     {
@@ -82,6 +83,8 @@ public:
             return "SoundCardInterfaceModule";
         case ModuleType::LinuxMultiClientTCPRxModule:
             return "LinuxMultiClientTCPRxModule";
+        case ModuleType::LinuxWAVWriterModule:
+            return "LinuxWAVWriterModule";
 
         default:
             return "Unknown Module";
