@@ -19,14 +19,13 @@
 
 /* Custom Includes */
 #include "BaseChunk.h"
-#include "ModuleTypes.h"
 #include "ChunkTypesNamingUtility.h"
 #include "CircularBuffer.h"
 #include <plog/Log.h>
 #include "plog/Initializers/RollingFileInitializer.h"
 
 /*
- * @brief Base processing class containing a threaded process 
+ * @brief Base processing class containing a threaded process
  *          to pass on chunks and thread safe input buffer.
  */
 class BaseModule
@@ -44,7 +43,7 @@ public:
      * @brief Returns module type
      * @param[out] ModuleType of processing module
      */
-    virtual ModuleType GetModuleType() { return ModuleType::ModuleBase; };
+    virtual std::string GetModuleType(){return "BaseModule"};
 
     /*
      * @brief Starts the process on its own thread
@@ -76,48 +75,48 @@ public:
     bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
 
     /*
-    *  @brief tacks time between consecutive chunk passes
-    *  @param[in] Boolean as to whether to track and log the processing time
-    *  @param[in] String log message
-    */
-    void TrackProcessTime(bool bTrackTime , std::string sTrackerMessage);
+     *  @brief tacks time between consecutive chunk passes
+     *  @param[in] Boolean as to whether to track and log the processing time
+     *  @param[in] String log message
+     */
+    void TrackProcessTime(bool bTrackTime, std::string sTrackerMessage);
 
     /*
-    * @brief used to test the processing of a particular module
-    * @param[in] pBaseChunk Pointer to base chuk
-    */
+     * @brief used to test the processing of a particular module
+     * @param[in] pBaseChunk Pointer to base chuk
+     */
     void TestProcess(std::shared_ptr<BaseChunk> pBaseChunk);
 
     /*
-    * @brief Puts the module into a test mode where a single chunk will be processed and returned when requested
-    * @param[in] Boolean as to whethere the module should be in test mode
-    */
+     * @brief Puts the module into a test mode where a single chunk will be processed and returned when requested
+     * @param[in] Boolean as to whethere the module should be in test mode
+     */
     void SetTestMode(bool bTestModeState);
 
     /*
-    * @brief If the mo
-    * @param[in] Boolean as to whethere the module should be in test mode
-    */
+     * @brief If the mo
+     * @param[in] Boolean as to whethere the module should be in test mode
+     */
     std::shared_ptr<BaseChunk> GetTestOutput();
 
 private:
-    size_t m_uMaxInputBufferSize;                                   ///< Max size of the class input buffer
-    std::atomic<bool> m_bTrackProcessTime = false;                  ///< Boolean as to whether to track and log the processing time
-    std::string m_sTrackerMessage = "";                             ///< Log message printed when logging chunk processing time
-    std::chrono::high_resolution_clock::time_point m_CurrentTime;   ///< Initial time used to track time between consecutive chunk passes
-    std::chrono::high_resolution_clock::time_point m_PreviousTime;  ///< Final time used to track time between consecutive chunk passes
+    size_t m_uMaxInputBufferSize;                                  ///< Max size of the class input buffer
+    std::atomic<bool> m_bTrackProcessTime = false;                 ///< Boolean as to whether to track and log the processing time
+    std::string m_sTrackerMessage = "";                            ///< Log message printed when logging chunk processing time
+    std::chrono::high_resolution_clock::time_point m_CurrentTime;  ///< Initial time used to track time between consecutive chunk passes
+    std::chrono::high_resolution_clock::time_point m_PreviousTime; ///< Final time used to track time between consecutive chunk passes
 
-    bool m_bTestMode;                                               ///< Boolean as to whether the module is doing doing normal processing or test processing
-    std::shared_ptr<BaseChunk> m_pTestChunkOutput;                  ///< Member used to store test outputs  
+    bool m_bTestMode;                              ///< Boolean as to whether the module is doing doing normal processing or test processing
+    std::shared_ptr<BaseChunk> m_pTestChunkOutput; ///< Member used to store test outputs
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
     CircularBuffer<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
-    std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking                                   
+    std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
     std::thread m_thread;                                           ///< Thread object for module processing
-    
+
     /**
      * @brief Returns true if a message pointer had been retrieved an passed on to next module.
      *          If no pointer in queue then returns false
@@ -139,7 +138,7 @@ protected:
      * @return True if message was sucessfully removed from the buffer
      * @return False if message was unsucessfully removed from the buffer
      */
-    bool TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk);
+    bool TakeFromBuffer(std::shared_ptr<BaseChunk> &pBaseChunk);
 };
 
 #endif
