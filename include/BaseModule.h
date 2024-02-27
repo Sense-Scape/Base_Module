@@ -43,7 +43,7 @@ public:
      * @brief Returns module type
      * @param[out] ModuleType of processing module
      */
-    virtual std::string GetModuleType(){return "BaseModule"};
+    virtual std::string GetModuleType() { return "BaseModule"; };
 
     /*
      * @brief Starts the process on its own thread
