@@ -1,0 +1,33 @@
+name: C++ Build for aarch64-linux-gnu
+
+on:
+  release:
+    types: [published]
+  pull_request:
+    branches:
+      - main
+
+env:
+  TOOLCHAIN_LOCATION: ../toolchains/aarch64-linux-gnu.cmake
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install ALSA
+      run: sudo apt-get install libasound2-dev
+
+    - name: Install Cross Compiler
+      run: sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+    - name: Checkout Project and Submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Generate CMake Files For Cross Compilation
+      run: cmake -B build -S . -D CMAKE_TOOLCHAIN_FILE=${{env.TOOLCHAIN_LOCATION}}
+
+    - name: Build
+      run: make -C build
