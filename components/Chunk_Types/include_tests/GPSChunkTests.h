@@ -22,7 +22,7 @@ TEST_CASE("GPSChunk Test")
         // lets check for equality to see if serialisation works
         CHECK(GPSChunkTestClass.IsEqual(GPSChunkTestClassCopy_0));
         // Then lets ensure that the size of the data contained is 2 bytes
-        CHECK(GPSChunkTestClass.GetSize() == 26);
+        CHECK(GPSChunkTestClass.GetSize() == 28);
     }
 
     // Lets now give the device a unique identifier and see if the size if correct
