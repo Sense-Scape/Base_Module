@@ -1,6 +1,5 @@
-#ifndef COORDINATE_CHUNK
-#define COORDINATE_CHUNK
-
+#ifndef GPS_CHUNK
+#define GPS_CHUNK
 
 /*Custom Includes*/
 #include "BaseChunk.h"
@@ -9,36 +8,38 @@
 /**
  * @brief Frequency Data Chunk used to store complex channel FFT data
  */
-class CoordinateChunk : public BaseChunk,
-    public ChunkToJSONConverter
+class GPSChunk : public BaseChunk,
+                 public ChunkToJSONConverter
 {
 public:
-    uint64_t m_i64TimeStamp;    ///< Timestamp of when chunk was created
-    double m_dLongitude;        ///< Longitude at point in time
-    double m_dLatitude;         ///< Latitude at point in time
+    uint64_t m_i64TimeStamp; ///< Timestamp of when chunk was created
+    bool m_bIsNorth;         ///< Whether latitude is north
+    double m_dLongitude;     ///< Longitude at point in time
+    bool m_bIsWest;          ///< Whether latitude is north
+    double m_dLatitude;      ///< Latitude at point in time
 
     /**
-     * @brief Construct a new empty CoordinateChunk object
+     * @brief Construct a new empty GPSChunk object
      */
-    CoordinateChunk();
+    GPSChunk();
 
     /**
      * @brief Copy constrtuctor for the FFT chunk
-     * @param[in] FFTChunk reference
+     * @param[in] GPSChunk reference
      */
-    CoordinateChunk(const CoordinateChunk &coordinateChunk);
+    GPSChunk(const GPSChunk &GPSChunk);
 
     /**
      * @brief Copy constrtuctor for the FFT chunk
      * @param[in] Shared pointer to FFT chunk
      */
-    CoordinateChunk(std::shared_ptr<CoordinateChunk> pCoordinateChunk);
+    GPSChunk(std::shared_ptr<GPSChunk> pGPSChunk);
 
     /**
      * @brief Get the Chunk Type object
      * @return[in] ChunkType of chunk
      */
-    ChunkType GetChunkType() override { return ChunkType::CoordinateChunk; };
+    ChunkType GetChunkType() override { return ChunkType::GPSChunk; };
 
     /**
      * @brief Get the size of object in bytes
@@ -59,20 +60,18 @@ public:
     void Deserialise(std::shared_ptr<std::vector<char>> pBytes);
 
     /**
-    * @brief Returns if the two classes are equal
-    * @param[in] CoordinateChunk Reference to the class with which we want to compare
-    * @return whether the classes are equal or not
-    */
-    bool IsEqual(CoordinateChunk& CoordinateChunk);
-
+     * @brief Returns if the two classes are equal
+     * @param[in] GPSChunk Reference to the class with which we want to compare
+     * @return whether the classes are equal or not
+     */
+    bool IsEqual(GPSChunk &GPSChunk);
 
     /**
-    * @brief Returns the JSON equivalent of this classes representation
-    */
+     * @brief Returns the JSON equivalent of this classes representation
+     */
     std::shared_ptr<nlohmann::json> ToJSON() override;
 
 protected:
-
     /**
      * @brief Fill a byte array the represents this object
      * @param[in] pByteArray Shared pointer to byte vector containing byte data
@@ -80,13 +79,11 @@ protected:
     std::shared_ptr<std::vector<char>> GetInternalSerialisation();
 
 private:
-
     /**
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
     unsigned GetInternalSize();
-
 };
 
 #endif
