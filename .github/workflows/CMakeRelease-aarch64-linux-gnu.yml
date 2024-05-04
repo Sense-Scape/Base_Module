@@ -1,4 +1,4 @@
-name: C++ Build and Release on Linux
+name: C++ Build for aarch64-linux-gnu
 
 on:
   release:
@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  TOOLCHAIN_LOCATION: ../toolchains/RaspberryPiToolchain.cmake
+  TOOLCHAIN_LOCATION: ../toolchains/aarch64-linux-gnu.cmake
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         submodules: recursive
 
     - name: Generate CMake Files For Cross Compilation
-      run: cmake -B build -S . -D CMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" -DCMAKE_TOOLCHAIN_FILE=${{env.TOOLCHAIN_LOCATION}}
+      run: cmake -B build -S . -D CMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" -D CMAKE_TOOLCHAIN_FILE=${{env.TOOLCHAIN_LOCATION}}
 
     - name: Build
       run: make -C build
