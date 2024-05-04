@@ -16,7 +16,7 @@
 
 // C
 #include "ChunkDuplicatorUtilityTests.h"
-#include "CoordinateChunkTests.h"
+#include "GPSChunkTests.h"
 
 // F
 #include "FFTChunkTests.h"
