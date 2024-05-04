@@ -27,10 +27,7 @@ jobs:
         submodules: recursive
 
     - name: Generate CMake Files For Cross Compilation
-      run: cmake -B build -S . -D CMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage" -D CMAKE_TOOLCHAIN_FILE=${{env.TOOLCHAIN_LOCATION}}
+      run: cmake -B build -S . -D CMAKE_TOOLCHAIN_FILE=${{env.TOOLCHAIN_LOCATION}}
 
     - name: Build
       run: make -C build
-
-    - name: Run the Test App
-      run: ctest --test-dir build --no-tests=error -C debug
