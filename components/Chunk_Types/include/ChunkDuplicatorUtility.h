@@ -7,6 +7,7 @@
 #include "WAVChunk.h"  
 #include "WatchdogChunk.h"
 #include "JSONChunk.h"
+#include "GPSChunk.h"
 
 class ChunkDuplicatorUtility
 {
@@ -22,6 +23,7 @@ public:
         case ChunkType::WAVChunk:  return std::make_shared<WAVChunk>(std::static_pointer_cast<WAVChunk>(pBaseChunk));
         case ChunkType::WatchdogChunk:  return std::make_shared<WatchdogChunk>(std::static_pointer_cast<WatchdogChunk>(pBaseChunk));
         case ChunkType::JSONChunk:  return std::make_shared<JSONChunk>(std::static_pointer_cast<JSONChunk>(pBaseChunk));
+        case ChunkType::GPSChunk:  return std::make_shared<GPSChunk>(std::static_pointer_cast<GPSChunk>(pBaseChunk));
 
         default:
         {
@@ -50,6 +52,11 @@ public:
         }
         else if (eChunkType == ChunkType::JSONChunk) {
             auto pChunk = std::make_shared<JSONChunk>();
+            pChunk->Deserialise(pBytes);
+            return pChunk;
+        }
+         else if (eChunkType == ChunkType::GPSChunk) {
+            auto pChunk = std::make_shared<GPSChunk>();
             pChunk->Deserialise(pBytes);
             return pChunk;
         }
