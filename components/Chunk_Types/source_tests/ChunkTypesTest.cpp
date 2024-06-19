@@ -18,6 +18,9 @@
 #include "ChunkDuplicatorUtilityTests.h"
 #include "GPSChunkTests.h"
 
+// D
+#include "DetectionBinChunkTests.h"
+
 // F
 #include "FFTChunkTests.h"
 
