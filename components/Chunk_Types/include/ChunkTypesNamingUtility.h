@@ -39,6 +39,8 @@ public:
             return "FFTMagnitudeChunk";
         case ChunkType::GPSChunk:
             return "GPSChunk";
+        case ChunkType::DetectionBinChunk:
+            return "DetectionBinChunk";
 
         default:
             return "Unknown Chunk";
@@ -67,6 +69,8 @@ public:
             return 8;
         case ChunkType::GPSChunk:
             return 9;
+        case ChunkType::DetectionBinChunk:
+            return 10;
 
         default:
             return 0; // error
@@ -95,6 +99,8 @@ public:
             return ChunkType::FFTMagnitudeChunk;
         case 9:
             return ChunkType::GPSChunk;
+        case 10:
+            return ChunkType::DetectionBinChunk;
 
         default:
             return ChunkType::ChunkBase; // error

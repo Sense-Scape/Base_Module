@@ -28,7 +28,8 @@ enum class ChunkType
     JSONChunk,
     FFTChunk,
     FFTMagnitudeChunk,
-    GPSChunk
+    GPSChunk,
+    DetectionBinChunk
 };
 
 #endif
