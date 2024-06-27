@@ -52,7 +52,7 @@ unsigned DirectionBinChunk::GetInternalSize()
     return uByteSize;
 }
 
-void DirectionBinChunk::SetDirectionData(uint16_t u16NumberOfDetections, std::vector<float> &vu16DetectionFrequencyIndicies, std::vector<float> &vvu16DetectionAngles_deg, double dSampleRate )
+void DirectionBinChunk::SetDirectionData(uint16_t u16NumberOfDetections, std::vector<uint16_t> &vu16DetectionFrequencyIndicies, std::vector<float> &vvu16DetectionAngles_deg, double dSampleRate )
 {
     m_u16NumberOfDetections = u16NumberOfDetections;
     m_vu16DetectionFrequencyIndicies = vu16DetectionFrequencyIndicies;
