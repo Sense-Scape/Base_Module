@@ -3,7 +3,7 @@
 DirectionBinChunk::DirectionBinChunk() :
     m_u16NumberOfDetections(),
     m_vu16DetectionFrequencyIndicies(),
-    m_vu16DetectionAngles_deg(),
+    m_vfDetectionAngles_deg(),
     m_dSampleRate(),
     BaseChunk()
 {
@@ -13,7 +13,7 @@ DirectionBinChunk::DirectionBinChunk() :
 DirectionBinChunk::DirectionBinChunk(std::shared_ptr<DirectionBinChunk> pDirectionBinChunk) :
     m_u16NumberOfDetections(pDirectionBinChunk->m_u16NumberOfDetections),
     m_vu16DetectionFrequencyIndicies(pDirectionBinChunk->m_vu16DetectionFrequencyIndicies),
-    m_vu16DetectionAngles_deg(pDirectionBinChunk->m_vu16DetectionAngles_deg),
+    m_vfDetectionAngles_deg(pDirectionBinChunk->m_vfDetectionAngles_deg),
     m_dSampleRate(pDirectionBinChunk->m_dSampleRate),
     BaseChunk(pDirectionBinChunk)
 {
@@ -23,7 +23,7 @@ DirectionBinChunk::DirectionBinChunk(std::shared_ptr<DirectionBinChunk> pDirecti
 DirectionBinChunk::DirectionBinChunk(const DirectionBinChunk& DirectionBinChunk) :
     m_u16NumberOfDetections(DirectionBinChunk.m_u16NumberOfDetections),
     m_vu16DetectionFrequencyIndicies(DirectionBinChunk.m_vu16DetectionFrequencyIndicies),
-    m_vu16DetectionAngles_deg(DirectionBinChunk.m_vu16DetectionAngles_deg),
+    m_vfDetectionAngles_deg(DirectionBinChunk.m_vfDetectionAngles_deg),
     m_dSampleRate(DirectionBinChunk.m_dSampleRate),
     BaseChunk(DirectionBinChunk)
 {
@@ -46,7 +46,7 @@ unsigned DirectionBinChunk::GetInternalSize()
     // Then this class
     uByteSize += sizeof(m_u16NumberOfDetections); 
     uByteSize += sizeof(m_vu16DetectionFrequencyIndicies[0])*m_u16NumberOfDetections;
-    uByteSize += sizeof(m_vu16DetectionAngles_deg[0])*m_u16NumberOfDetections;
+    uByteSize += sizeof(m_vfDetectionAngles_deg[0])*m_u16NumberOfDetections;
     uByteSize += sizeof(m_dSampleRate);
 
     return uByteSize;
@@ -56,7 +56,7 @@ void DirectionBinChunk::SetDirectionData(uint16_t u16NumberOfDetections, std::ve
 {
     m_u16NumberOfDetections = u16NumberOfDetections;
     m_vu16DetectionFrequencyIndicies = vu16DetectionFrequencyIndicies;
-    m_vu16DetectionAngles_deg = vvu16DetectionAngles_deg;
+    m_vfDetectionAngles_deg = vvu16DetectionAngles_deg;
     m_dSampleRate = dSampleRate;
 
     assert(m_vu16DetectionFrequencyIndicies.size() == m_u16NumberOfDetections);
@@ -87,8 +87,8 @@ std::shared_ptr<std::vector<char>> DirectionBinChunk::GetInternalSerialisation()
     memcpy(pcBytes, &m_vu16DetectionFrequencyIndicies[0], uChunkSizeBytes);
     pcBytes += uChunkSizeBytes;
 
-    uChunkSizeBytes = sizeof(m_vu16DetectionAngles_deg[0]) * m_u16NumberOfDetections;
-    memcpy(pcBytes, &m_vu16DetectionAngles_deg[0], uChunkSizeBytes);
+    uChunkSizeBytes = sizeof(m_vfDetectionAngles_deg[0]) * m_u16NumberOfDetections;
+    memcpy(pcBytes, &m_vfDetectionAngles_deg[0], uChunkSizeBytes);
     pcBytes += uChunkSizeBytes;
 
     return pvBytes;
@@ -105,20 +105,19 @@ void DirectionBinChunk::Deserialise(std::shared_ptr<std::vector<char>> pvBytes)
     memcpy(&m_u16NumberOfDetections, pcBytes, 2);
     pcBytes += sizeof(m_u16NumberOfDetections);
 
-    unsigned uSampleSize = 4;
     m_vu16DetectionFrequencyIndicies.resize(m_u16NumberOfDetections);
     for (unsigned uDetectionIndex = 0; uDetectionIndex < m_u16NumberOfDetections; uDetectionIndex++)
     {
-        memcpy(&m_vu16DetectionFrequencyIndicies[uDetectionIndex], pcBytes, uSampleSize);
-        pcBytes += uSampleSize;
+        memcpy(&m_vu16DetectionFrequencyIndicies[uDetectionIndex], pcBytes, 2);
+        pcBytes += 2;
     }
 
     // Filling data vector
-    m_vu16DetectionAngles_deg.resize(m_u16NumberOfDetections);
+    m_vfDetectionAngles_deg.resize(m_u16NumberOfDetections);
     for (unsigned uDetectionIndex = 0; uDetectionIndex < m_u16NumberOfDetections; uDetectionIndex++)
     {
-        memcpy(&m_vu16DetectionAngles_deg[uDetectionIndex], pcBytes, uSampleSize);
-        pcBytes += uSampleSize;
+        memcpy(&m_vfDetectionAngles_deg[uDetectionIndex], pcBytes, 4);
+        pcBytes += 4;
     }
     
     memcpy(&m_dSampleRate, pcBytes, sizeof(double));
@@ -135,7 +134,7 @@ bool DirectionBinChunk::IsEqual(DirectionBinChunk& DirectionBinChunk)
 
     // We can then compare DirectionBinChunk paramerters
     bool bIsEqual = (
-            m_vu16DetectionAngles_deg == DirectionBinChunk.m_vu16DetectionAngles_deg ||
+            m_vfDetectionAngles_deg == DirectionBinChunk.m_vfDetectionAngles_deg ||
             m_vu16DetectionFrequencyIndicies == DirectionBinChunk.m_vu16DetectionFrequencyIndicies ||
             m_dSampleRate == DirectionBinChunk.m_dSampleRate        
         );
@@ -159,7 +158,7 @@ std::shared_ptr<nlohmann::json> DirectionBinChunk::ToJSON()
     JSONDocument[strChunkName]["NumberOfDetections"] =  std::to_string(m_u16NumberOfDetections);
 
     JSONDocument[strChunkName]["DetectionFrequencyIndicies"] = m_vu16DetectionFrequencyIndicies;
-    JSONDocument[strChunkName]["DetectionAngles_deg"] = m_vu16DetectionAngles_deg;
+    JSONDocument[strChunkName]["DetectionAngles_deg"] = m_vfDetectionAngles_deg;
 
     return std::make_shared<nlohmann::json>(JSONDocument);
 }

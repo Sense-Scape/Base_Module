@@ -91,7 +91,7 @@ public:
      * @brief Retrieves the detection angles in degrees.
      * @return A vector containing the detection angles in degrees.
      */
-    std::vector<float> GetDetectionAngles() {return m_vu16DetectionAngles_deg;}
+    std::vector<float> GetDetectionAngles() {return m_vfDetectionAngles_deg;}
 
     /**
      * @brief Retrieves the sample rate used for the detections.
@@ -110,7 +110,7 @@ private:
 
     uint16_t m_u16NumberOfDetections;                       ///< Number of Detection angles in this chunk
     std::vector<uint16_t> m_vu16DetectionFrequencyIndicies; ///< Vector of vectors containing detection indicies per channel
-    std::vector<float> m_vu16DetectionAngles_deg;           ///< Vector of vectors containing detection indicies per channel
+    std::vector<float> m_vfDetectionAngles_deg;           ///< Vector of vectors containing detection indicies per channel
     double m_dSampleRate;                                   ///< Sample rate used to generate data
 
     /**
