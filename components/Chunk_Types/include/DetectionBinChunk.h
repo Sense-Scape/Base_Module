@@ -108,9 +108,9 @@ protected:
 
 private:
 
-    u_int16_t m_u16NumChannels;
-    std::vector<uint16_t> m_vu16DetectedBinsPerChannel;
-    std::vector<std::vector<uint16_t>> m_vvu16DetectionBins;
+    u_int16_t m_u16NumChannels;                             ///< Number of channels of data within chunk
+    std::vector<uint16_t> m_vu16DetectedBinsPerChannel;     ///< Vector of indicies corresponding to deteciton index
+    std::vector<std::vector<uint16_t>> m_vvu16DetectionBins;///< Vector of vectors containing detection indicies per channel 
 
     /**
      * @brief Get the size of object in bytes
