@@ -73,7 +73,7 @@ public:
      * @param vvu16DetectionAngles_deg Reference to a vector containing the detection angles in degrees.
      * @param dSampleRate The sample rate used for the detections.
      */
-    void SetDirectionData(uint16_t u16NumberOfDetections, std::vector<float> &vu16DetectionFrequencyIndicies, std::vector<float> &vvu16DetectionAngles_deg, double dSampleRate );
+    void SetDirectionData(uint16_t u16NumberOfDetections, std::vector<uint16_t> &vu16DetectionFrequencyIndicies, std::vector<float> &vvu16DetectionAngles_deg, double dSampleRate );
 
     /**
      * @brief Retrieves the number of detections.
@@ -85,13 +85,13 @@ public:
      * @brief Retrieves the detection frequency indices.
      * @return A vector containing the detection frequency indices.
      */
-    std::vector<float> GetDetectionFrequencyIndicies() {return m_vu16DetectionFrequencyIndicies;}
+    std::vector<uint16_t> GetDetectionFrequencyIndicies() {return m_vu16DetectionFrequencyIndicies;}
 
     /**
      * @brief Retrieves the detection angles in degrees.
      * @return A vector containing the detection angles in degrees.
      */
-    std::vector<float> GetDetectionAngles() {return m_vu16DetectionAngles_deg;}
+    std::vector<float> GetDetectionAngles() {return m_vfDetectionAngles_deg;}
 
     /**
      * @brief Retrieves the sample rate used for the detections.
@@ -109,8 +109,8 @@ protected:
 private:
 
     uint16_t m_u16NumberOfDetections;                       ///< Number of Detection angles in this chunk
-    std::vector<float> m_vu16DetectionFrequencyIndicies;    ///< Vector of vectors containing detection indicies per channel
-    std::vector<float> m_vu16DetectionAngles_deg;           ///< Vector of vectors containing detection indicies per channel
+    std::vector<uint16_t> m_vu16DetectionFrequencyIndicies; ///< Vector of vectors containing detection indicies per channel
+    std::vector<float> m_vfDetectionAngles_deg;           ///< Vector of vectors containing detection indicies per channel
     double m_dSampleRate;                                   ///< Sample rate used to generate data
 
     /**

@@ -9,7 +9,7 @@ TEST_CASE("DirectionBinChunk Test") {
     DirectionBinChunk cDirectionBinChunk = DirectionBinChunk();
 
     uint16_t u16NumberOfDetection = 2;
-    std::vector<float> vfDetectionIndicies = {0,1};
+    std::vector<uint16_t> vfDetectionIndicies = {0,1};
     std::vector<float> vfDetectionAngles_deg = {0,2}; 
     double dSampleRate_hz = 100;
     cDirectionBinChunk.SetDirectionData(u16NumberOfDetection, vfDetectionIndicies, vfDetectionAngles_deg, dSampleRate_hz);
@@ -17,7 +17,7 @@ TEST_CASE("DirectionBinChunk Test") {
     BaseChunk baseChunk;
 
     // 2 for u16NumberOfDetection, 2 for detections per chan, 12 for each detection
-    unsigned uClassSize_bytes = 2 + 4*2 + 4*2 + 8 + baseChunk.GetSize();
+    unsigned uClassSize_bytes = 2 + 2*2 + 4*2 + 8 + baseChunk.GetSize();
 
     SUBCASE("Checking General functionality") {
         CHECK(cDirectionBinChunk.GetChunkType() == ChunkType::DirectionBinChunk);
