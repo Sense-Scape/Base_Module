@@ -29,7 +29,8 @@ enum class ChunkType
     FFTChunk,
     FFTMagnitudeChunk,
     GPSChunk,
-    DetectionBinChunk
+    DetectionBinChunk,
+    DirectionBinChunk
 };
 
 #endif

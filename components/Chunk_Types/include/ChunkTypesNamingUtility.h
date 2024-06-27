@@ -41,7 +41,8 @@ public:
             return "GPSChunk";
         case ChunkType::DetectionBinChunk:
             return "DetectionBinChunk";
-
+        case ChunkType::DirectionBinChunk:
+            return "DirectionBinChunk";
         default:
             return "Unknown Chunk";
         }
@@ -101,7 +102,8 @@ public:
             return ChunkType::GPSChunk;
         case 10:
             return ChunkType::DetectionBinChunk;
-
+        case 11:
+            return ChunkType::DirectionBinChunk;
         default:
             return ChunkType::ChunkBase; // error
         }
