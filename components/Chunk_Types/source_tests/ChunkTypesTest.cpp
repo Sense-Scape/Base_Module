@@ -20,6 +20,7 @@
 
 // D
 #include "DetectionBinChunkTests.h"
+#include "DirectionBinChunkTests.h"
 
 // F
 #include "FFTChunkTests.h"
