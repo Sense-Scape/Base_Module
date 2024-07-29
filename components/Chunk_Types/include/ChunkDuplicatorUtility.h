@@ -8,6 +8,7 @@
 #include "WatchdogChunk.h"
 #include "JSONChunk.h"
 #include "GPSChunk.h"
+#include "QueueLengthChunk.h"
 
 class ChunkDuplicatorUtility
 {
@@ -15,6 +16,7 @@ public:
 
     static std::shared_ptr<BaseChunk> DuplicateDerivedChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     {
+        std::cout<<"LLLLP{PPPP}"<<std::endl;
         switch (pBaseChunk->GetChunkType())
         {
         case ChunkType::ChunkBase: return std::make_shared<BaseChunk>(pBaseChunk);
@@ -24,6 +26,7 @@ public:
         case ChunkType::WatchdogChunk:  return std::make_shared<WatchdogChunk>(std::static_pointer_cast<WatchdogChunk>(pBaseChunk));
         case ChunkType::JSONChunk:  return std::make_shared<JSONChunk>(std::static_pointer_cast<JSONChunk>(pBaseChunk));
         case ChunkType::GPSChunk:  return std::make_shared<GPSChunk>(std::static_pointer_cast<GPSChunk>(pBaseChunk));
+        case ChunkType::QueueLengthChunk:  return std::make_shared<QueueLengthChunk>(std::static_pointer_cast<QueueLengthChunk>(pBaseChunk));
 
         default:
         {
@@ -55,8 +58,14 @@ public:
             pChunk->Deserialise(pBytes);
             return pChunk;
         }
-         else if (eChunkType == ChunkType::GPSChunk) {
+        else if (eChunkType == ChunkType::GPSChunk) {
             auto pChunk = std::make_shared<GPSChunk>();
+            pChunk->Deserialise(pBytes);
+            return pChunk;
+        }
+        else if (eChunkType == ChunkType::QueueLengthChunk) {
+            std::cout<<"LLLLP{PPPP}"<<std::endl;
+            auto pChunk = std::make_shared<QueueLengthChunk>();
             pChunk->Deserialise(pBytes);
             return pChunk;
         }
