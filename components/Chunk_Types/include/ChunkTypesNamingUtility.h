@@ -43,6 +43,8 @@ public:
             return "DetectionBinChunk";
         case ChunkType::DirectionBinChunk:
             return "DirectionBinChunk";
+        case ChunkType::QueueLengthChunk:
+            return "QueueLengthChunk";
         default:
             return "Unknown Chunk";
         }
@@ -72,7 +74,8 @@ public:
             return 9;
         case ChunkType::DetectionBinChunk:
             return 10;
-
+        case ChunkType::QueueLengthChunk:
+            return 11;
         default:
             return 0; // error
         }
@@ -104,6 +107,8 @@ public:
             return ChunkType::DetectionBinChunk;
         case 11:
             return ChunkType::DirectionBinChunk;
+        case 12:
+            return ChunkType::QueueLengthChunk;
         default:
             return ChunkType::ChunkBase; // error
         }
