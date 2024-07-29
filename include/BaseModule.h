@@ -23,6 +23,7 @@
 #include "CircularBuffer.h"
 #include <plog/Log.h>
 #include "plog/Initializers/RollingFileInitializer.h"
+#include "QueueLengthChunk.h"
 
 /*
  * @brief Base processing class containing a threaded process
@@ -99,12 +100,17 @@ public:
      */
     std::shared_ptr<BaseChunk> GetTestOutput();
 
+    /*
+     * @brief Function to start the reporting thread
+     */
+    void StartReporting();
+
 private:
-    size_t m_uMaxInputBufferSize;                                  ///< Max size of the class input buffer
-    std::atomic<bool> m_bTrackProcessTime = false;                 ///< Boolean as to whether to track and log the processing time
-    std::string m_sTrackerMessage = "";                            ///< Log message printed when logging chunk processing time
-    std::chrono::high_resolution_clock::time_point m_CurrentTime;  ///< Initial time used to track time between consecutive chunk passes
-    std::chrono::high_resolution_clock::time_point m_PreviousTime; ///< Final time used to track time between consecutive chunk passes
+    size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
+    std::atomic<bool> m_bTrackProcessTime = false;                          ///< Boolean as to whether to track and log the processing time
+    std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
+    std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
+    std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
 
     bool m_bTestMode;                              ///< Boolean as to whether the module is doing doing normal processing or test processing
     std::shared_ptr<BaseChunk> m_pTestChunkOutput; ///< Member used to store test outputs
@@ -115,7 +121,12 @@ protected:
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
-    std::thread m_thread;                                           ///< Thread object for module processing
+    std::thread m_thread;                                 ///< Thread object for module processing
+
+    std::thread m_QueueSizeReportingThread;
+    std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
+    std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
+
 
     /**
      * @brief Returns true if a message pointer had been retrieved an passed on to next module.
@@ -139,6 +150,11 @@ protected:
      * @return False if message was unsucessfully removed from the buffer
      */
     bool TakeFromBuffer(std::shared_ptr<BaseChunk> &pBaseChunk);
+
+    /*
+     * @brief Calls the infinite loop to report
+     */
+    void StartReportingLoop();
 };
 
 #endif

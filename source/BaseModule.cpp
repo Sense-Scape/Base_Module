@@ -7,6 +7,7 @@ BaseModule::BaseModule(unsigned uMaxInputBufferSize) :
     m_pNextModule(nullptr),
     m_bShutDown()
 {
+    
 }
 
 BaseModule::~BaseModule()
@@ -18,6 +19,7 @@ BaseModule::~BaseModule()
     if(m_thread.joinable())
         m_thread.join();
 }
+
 void BaseModule::Process(std::shared_ptr<BaseChunk> pBaseChunk)
 {
     TryPassChunk(pBaseChunk);
@@ -69,16 +71,14 @@ bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     // Lets first check we are doing timing debugging
     if (m_bTrackProcessTime)
     {
-        // if so print the last time since we passed a message. This should give us an estimate of how
-        // long the module is taking to process
-        auto duration = std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(m_CurrentTime - m_PreviousTime).count());
-        std::string strInfo = std::string(__FUNCTION__) + m_sTrackerMessage + ": Time between passing chunks = " + duration + "us";
-        PLOG_INFO << strInfo;
+        auto duration = std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(m_CurrentTrackingTime - m_PreviousTimeTracking).count());
+        m_PreviousTimeTracking = m_CurrentTrackingTime;
+        m_CurrentTrackingTime = std::chrono::high_resolution_clock::now();
 
-        m_PreviousTime = m_CurrentTime;
-        m_CurrentTime = std::chrono::high_resolution_clock::now();
+        std::string strInfo = std::string(__FUNCTION__) + m_sTrackerMessage + ": Time between passing chunks = " + duration + "us";
+        PLOG_INFO << strInfo;  
     }
-    
+       
     // Allow module that one is passing to to facilitate its own locking procedures
     bool bReturnSuccessful = false;
 
@@ -103,6 +103,8 @@ bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
         m_cbBaseChunkBuffer.put(pBaseChunk);
         bChunkPassed = true;
     }
+    else
+        PLOG_WARNING << GetModuleType() + " Unable to accept chunk, queue full";
 
     // Then release and tell everyone we done
     BufferStateLock.unlock();
@@ -131,8 +133,8 @@ void BaseModule::TrackProcessTime(bool bTrackTime, std::string sTrackerMessage)
     m_sTrackerMessage = sTrackerMessage;
     m_bTrackProcessTime = bTrackTime;
     // Then start the timers
-    m_PreviousTime = std::chrono::high_resolution_clock::now();
-    m_CurrentTime = std::chrono::high_resolution_clock::now();
+    m_PreviousTimeTracking = std::chrono::high_resolution_clock::now();
+    m_CurrentTrackingTime = std::chrono::high_resolution_clock::now();
 }
 
 void BaseModule::TestProcess(std::shared_ptr<BaseChunk> pBaseChunk)
@@ -155,4 +157,33 @@ std::shared_ptr<BaseChunk> BaseModule::GetTestOutput()
 void BaseModule::SetTestMode(bool bTestModeState)
 {
     m_bTestMode = bTestModeState;
+}
+
+void BaseModule::StartReporting()
+{
+    m_QueueSizeReportingThread = std::thread([this]()
+            { StartReportingLoop(); });
+}
+
+void BaseModule::StartReportingLoop()
+{
+    while (!m_bShutDown)
+    {
+        // Lets start by generating Queue stat
+        std::unique_lock<std::mutex> BufferAccessLock(m_BufferStateMutex);
+        uint16_t u16CurrentBufferSize = m_cbBaseChunkBuffer.size();
+        auto strModuleName = GetModuleType();
+        BufferAccessLock.unlock();
+
+        // Then transmit
+        auto pQueueChunk = std::make_shared<QueueLengthChunk>(strModuleName, u16CurrentBufferSize);
+        pQueueChunk->SetSourceIdentifier({1,2,3,4});
+        auto bSuccessfullyPassed = TryPassChunk(pQueueChunk);
+
+        if (!bSuccessfullyPassed)
+            PLOG_WARNING << GetModuleType() + " Failed to pass chunk" ;    
+
+        // And sleep as not to send too many
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
 }
