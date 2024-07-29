@@ -7,4 +7,4 @@ Release/
 x64/
 
 # Other
-build/
+build*/
