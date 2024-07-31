@@ -52,66 +52,12 @@ public:
 
     static uint32_t ToU32(ChunkType eChunkType)
     {
-        switch (eChunkType)
-        {
-        case ChunkType::ChunkBase:
-            return 1;
-        case ChunkType::ByteChunk:
-            return 2;
-        case ChunkType::TimeChunk:
-            return 3;
-        case ChunkType::WAVChunk:
-            return 4;
-        case ChunkType::WatchdogChunk:
-            return 5;
-        case ChunkType::FFTChunk:
-            return 6;
-        case ChunkType::JSONChunk:
-            return 7;
-        case ChunkType::FFTMagnitudeChunk:
-            return 8;
-        case ChunkType::GPSChunk:
-            return 9;
-        case ChunkType::DetectionBinChunk:
-            return 10;
-        case ChunkType::QueueLengthChunk:
-            return 11;
-        default:
-            return 0; // error
-        }
+        return static_cast<uint32_t>(eChunkType);
     }
 
     static ChunkType FromU32(uint32_t u32ChunkType)
-    {
-        switch (u32ChunkType)
-        {
-        case 1:
-            return ChunkType::ChunkBase;
-        case 2:
-            return ChunkType::ByteChunk;
-        case 3:
-            return ChunkType::TimeChunk;
-        case 4:
-            return ChunkType::WAVChunk;
-        case 5:
-            return ChunkType::WatchdogChunk;
-        case 6:
-            return ChunkType::FFTChunk;
-        case 7:
-            return ChunkType::JSONChunk;
-        case 8:
-            return ChunkType::FFTMagnitudeChunk;
-        case 9:
-            return ChunkType::GPSChunk;
-        case 10:
-            return ChunkType::DetectionBinChunk;
-        case 11:
-            return ChunkType::DirectionBinChunk;
-        case 12:
-            return ChunkType::QueueLengthChunk;
-        default:
-            return ChunkType::ChunkBase; // error
-        }
+    {   
+        return static_cast<ChunkType>(u32ChunkType);
     }
 };
 
