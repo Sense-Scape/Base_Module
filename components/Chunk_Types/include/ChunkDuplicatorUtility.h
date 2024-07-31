@@ -8,6 +8,8 @@
 #include "WatchdogChunk.h"
 #include "JSONChunk.h"
 #include "GPSChunk.h"
+#include "DirectionBinChunk.h"
+#include "DetectionBinChunk.h"
 #include "QueueLengthChunk.h"
 
 class ChunkDuplicatorUtility
@@ -16,7 +18,6 @@ public:
 
     static std::shared_ptr<BaseChunk> DuplicateDerivedChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     {
-        std::cout<<"LLLLP{PPPP}"<<std::endl;
         switch (pBaseChunk->GetChunkType())
         {
         case ChunkType::ChunkBase: return std::make_shared<BaseChunk>(pBaseChunk);
@@ -26,6 +27,8 @@ public:
         case ChunkType::WatchdogChunk:  return std::make_shared<WatchdogChunk>(std::static_pointer_cast<WatchdogChunk>(pBaseChunk));
         case ChunkType::JSONChunk:  return std::make_shared<JSONChunk>(std::static_pointer_cast<JSONChunk>(pBaseChunk));
         case ChunkType::GPSChunk:  return std::make_shared<GPSChunk>(std::static_pointer_cast<GPSChunk>(pBaseChunk));
+        case ChunkType::DetectionBinChunk:  return std::make_shared<DetectionBinChunk>(std::static_pointer_cast<DetectionBinChunk>(pBaseChunk));
+        case ChunkType::DirectionBinChunk:  return std::make_shared<DirectionBinChunk>(std::static_pointer_cast<DirectionBinChunk>(pBaseChunk));
         case ChunkType::QueueLengthChunk:  return std::make_shared<QueueLengthChunk>(std::static_pointer_cast<QueueLengthChunk>(pBaseChunk));
 
         default:
@@ -63,14 +66,23 @@ public:
             pChunk->Deserialise(pBytes);
             return pChunk;
         }
+        else if (eChunkType == ChunkType::DetectionBinChunk) {
+            auto pChunk = std::make_shared<DetectionBinChunk>();
+            pChunk->Deserialise(pBytes);
+            return pChunk;
+        }
+        else if (eChunkType == ChunkType::DirectionBinChunk) {
+            auto pChunk = std::make_shared<DirectionBinChunk>();
+            pChunk->Deserialise(pBytes);
+            return pChunk;
+        }
         else if (eChunkType == ChunkType::QueueLengthChunk) {
-            std::cout<<"LLLLP{PPPP}"<<std::endl;
             auto pChunk = std::make_shared<QueueLengthChunk>();
             pChunk->Deserialise(pBytes);
             return pChunk;
         }
         else {
-            std::cout << std::string(__FUNCTION__) + ": Unknown chunk type \n";
+            std::cout << std::string(__FUNCTION__) + ": Unknown chunk type: " + std::to_string(ChunkTypesNamingUtility::ToU32(eChunkType))+ " " + ChunkTypesNamingUtility::toString(eChunkType) +" \n";
             auto pChunk = std::make_shared<BaseChunk>();
             pChunk->Deserialise(pBytes);
             return pChunk;
