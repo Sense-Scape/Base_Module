@@ -7,7 +7,7 @@ BaseModule::BaseModule(unsigned uMaxInputBufferSize) :
     m_pNextModule(nullptr),
     m_bShutDown()
 {
-    
+
 }
 
 BaseModule::~BaseModule()
@@ -177,7 +177,6 @@ void BaseModule::StartReportingLoop()
 
         // Then transmit
         auto pQueueChunk = std::make_shared<QueueLengthChunk>(strModuleName, u16CurrentBufferSize);
-        pQueueChunk->SetSourceIdentifier({1,2,3,4});
         auto bSuccessfullyPassed = TryPassChunk(pQueueChunk);
 
         if (!bSuccessfullyPassed)
