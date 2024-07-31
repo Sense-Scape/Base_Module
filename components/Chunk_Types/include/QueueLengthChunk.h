@@ -31,7 +31,7 @@ public:
      * @brief Get the Chunk Type object
      * @return ChunkType Chunk type of the chunk
      */
-    virtual ChunkType GetChunkType() override { return ChunkType::QueueLengthChunk; };
+    ChunkType GetChunkType() override { return ChunkType::QueueLengthChunk; };
 
     /**
      * @brief Get the size of object in bytes

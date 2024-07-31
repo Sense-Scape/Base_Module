@@ -126,7 +126,6 @@ void QueueLengthChunk::Deserialise(std::shared_ptr<std::vector<char>> pvBytes)
     memcpy(&m_u16QueueNameLength, pcBytes, sizeof(m_u16QueueNameLength));
     pcBytes += sizeof(m_u16QueueNameLength);
 
-    std::cout<<m_u16QueueNameLength<<std::endl;
     if(m_u16QueueNameLength)
     {
         m_strQueueName.assign(pcBytes, m_u16QueueNameLength);
