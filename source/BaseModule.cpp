@@ -94,18 +94,27 @@ bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
 {
     // Maintain lock to prevent another module trying to access buffer
     // in the multi input buffer configuration
-    bool bChunkPassed = false;
     std::unique_lock<std::mutex> BufferStateLock(m_BufferStateMutex);
 
+   
+    bool bBufferHasSpace = m_cbBaseChunkBuffer.size() < m_uMaxInputBufferSize;
+    bool bChunkPassed = false;
+    bool bLogBufferFull = !bBufferHasSpace && !m_bAlreadyLoggedBufferFull;
+
     // Check if next module queue is full
-    if (m_cbBaseChunkBuffer.size() < m_uMaxInputBufferSize)
+    if (bBufferHasSpace)
     {
         m_cbBaseChunkBuffer.put(pBaseChunk);
+        
+        m_bAlreadyLoggedBufferFull = false;
         bChunkPassed = true;
     }
-    else
+    else if(bLogBufferFull)
+    {
+        m_bAlreadyLoggedBufferFull = true;
         PLOG_WARNING << GetModuleType() + " Unable to accept chunk, queue full";
-
+    }
+        
     // Then release and tell everyone we done
     BufferStateLock.unlock();
     m_cvDataInBuffer.notify_all();
