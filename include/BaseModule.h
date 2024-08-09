@@ -107,13 +107,14 @@ public:
 
 private:
     size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
+
     std::atomic<bool> m_bTrackProcessTime = false;                          ///< Boolean as to whether to track and log the processing time
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
 
-    bool m_bTestMode;                              ///< Boolean as to whether the module is doing doing normal processing or test processing
-    std::shared_ptr<BaseChunk> m_pTestChunkOutput; ///< Member used to store test outputs
+    bool m_bTestMode;                                                       ///< Boolean as to whether the module is doing doing normal processing or test processing
+    std::shared_ptr<BaseChunk> m_pTestChunkOutput;                          ///< Member used to store test outputs
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
@@ -121,7 +122,8 @@ protected:
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
-    std::thread m_thread;                                 ///< Thread object for module processing
+    std::thread m_thread;                                           ///< Thread object for module processing
+    bool m_bAlreadyLoggedBufferFull;                                ///< Boolean State machine tracking if we have logged whether queue is full
 
     std::thread m_QueueSizeReportingThread;
     std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
