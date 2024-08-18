@@ -21,7 +21,6 @@
 /* Custom Includes */
 #include "BaseChunk.h"
 #include "ChunkTypesNamingUtility.h"
-#include "CircularBuffer.h"
 #include <plog/Log.h>
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "QueueLengthChunk.h"
