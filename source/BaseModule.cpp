@@ -3,7 +3,7 @@
 BaseModule::BaseModule(unsigned uMaxInputBufferSize) : 
     m_uMaxInputBufferSize(uMaxInputBufferSize),
     m_cvDataInBuffer(),
-    m_cbBaseChunkBuffer(uMaxInputBufferSize),
+    m_cbBaseChunkBuffer(),
     m_pNextModule(nullptr),
     m_bShutDown()
 {
@@ -44,8 +44,13 @@ void BaseModule::ContinuouslyTryProcess()
 void BaseModule::StartProcessing()
 {
     if (!m_thread.joinable())
+    {
         m_thread = std::thread([this]()
             { ContinuouslyTryProcess(); });
+
+        std::string strInfo = std::string(__FUNCTION__) + " " + GetModuleType() + ": Processing thread started";
+        PLOG_WARNING << strInfo;
+    }  
     else
     {
         // Log warning
@@ -66,7 +71,7 @@ void BaseModule::SetNextModule(std::shared_ptr<BaseModule> pNextModule)
     m_pNextModule = pNextModule;
 }
 
-bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
+bool BaseModule::TryPassChunk(const std::shared_ptr<BaseChunk> &pBaseChunk)
 {
     // Lets first check we are doing timing debugging
     if (m_bTrackProcessTime)
@@ -83,14 +88,14 @@ bool BaseModule::TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk)
     bool bReturnSuccessful = false;
 
     if (m_pNextModule != nullptr)
-        bReturnSuccessful = m_pNextModule->TakeChunkFromModule(pBaseChunk);
+        bReturnSuccessful = m_pNextModule->TakeChunkFromModule(std::move(pBaseChunk));
     else if (m_bTestMode)
         m_pTestChunkOutput = pBaseChunk;
 
     return bReturnSuccessful;
 }
 
-bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
+bool BaseModule::TakeChunkFromModule(const std::shared_ptr<BaseChunk> &pBaseChunk)
 {
     // Maintain lock to prevent another module trying to access buffer
     // in the multi input buffer configuration
@@ -104,7 +109,7 @@ bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
     // Check if next module queue is full
     if (bBufferHasSpace)
     {
-        m_cbBaseChunkBuffer.put(pBaseChunk);
+        m_cbBaseChunkBuffer.push(std::move(pBaseChunk));
         
         m_bAlreadyLoggedBufferFull = false;
         bChunkPassed = true;
@@ -121,7 +126,7 @@ bool BaseModule::TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk)
     return bChunkPassed;
 }
 
-bool BaseModule::TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk)
+bool BaseModule::TakeFromBuffer(std::shared_ptr<BaseChunk> &pBaseChunk)
 {
     // Maintain lock to prevent another module trying to access buffer
     // in the multi input buffer configuration
@@ -129,7 +134,8 @@ bool BaseModule::TakeFromBuffer(std::shared_ptr<BaseChunk>& pBaseChunk)
 
     if (!m_cbBaseChunkBuffer.empty())
     {
-        pBaseChunk = m_cbBaseChunkBuffer.get();
+        pBaseChunk = std::move(m_cbBaseChunkBuffer.front());
+        m_cbBaseChunkBuffer.pop();
         return true;
     }
 
