@@ -16,6 +16,7 @@
 #include <queue>
 #include <vector>
 #include <chrono>
+#include <queue>
 
 /* Custom Includes */
 #include "BaseChunk.h"
@@ -73,7 +74,7 @@ public:
      * @return True if message was sucessfully inserted into the buffer
      * @return False if message was unsucessfully inserted into the buffer
      */
-    bool TakeChunkFromModule(std::shared_ptr<BaseChunk> pBaseChunk);
+    bool TakeChunkFromModule(const std::shared_ptr<BaseChunk> &pBaseChunk);
 
     /*
      *  @brief tacks time between consecutive chunk passes
@@ -118,7 +119,7 @@ private:
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
-    CircularBuffer<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
+    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
@@ -143,7 +144,7 @@ protected:
      * @return True if message was sucessfully inserted into queue
      * @return False if message was unsucessfully inserted into queue
      */
-    bool TryPassChunk(std::shared_ptr<BaseChunk> pBaseChunk);
+    bool TryPassChunk(const std::shared_ptr<BaseChunk> &pBaseChunk);
 
     /**
      * @brief Tries to extract a message from the input buffer
