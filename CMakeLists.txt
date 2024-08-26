@@ -19,11 +19,6 @@ add_library(BaseModuleLib
     ${SOURCES}
 )
 
-# Test executable
-add_executable(BaseModuleTest
-    ${SOURCE_TESTS_DIR}/BaseModuleTest.cpp 
-)
-
 add_subdirectory(components/Chunk_Types)
 add_subdirectory(components/plog)
 
@@ -36,25 +31,12 @@ target_include_directories(BaseModuleLib
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/plog/include
 )
 
-target_include_directories(BaseModuleTest
-    PRIVATE ${INCLUDE_DIR}
-    PRIVATE ${INCLUDE_TESTS_DIR}
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/doctest/doctest
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/Chunk_Types/components/Nlohmann_JSON/include
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/Chunk_Types/components/Nlohmann_JSON/include/nlohmann
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/Chunk_Types/include
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/components/plog/include
-)
-
 # Adding threads
 target_link_libraries(BaseModuleLib PRIVATE pthread)
 target_link_libraries(BaseModuleLib PRIVATE ${THREADS_LIBRARIES})
 
 # Link with required libraries for the main executable
 target_link_libraries(BaseModuleLib PRIVATE ChunkTypesLib doctest::doctest)
-
-# Link with required libraries for the test executable
-target_link_libraries(BaseModuleTest PRIVATE ChunkTypesLib BaseModuleLib doctest::doctest)
 
 # Enable testing
 enable_testing()

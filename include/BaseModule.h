@@ -17,6 +17,7 @@
 #include <vector>
 #include <chrono>
 #include <queue>
+#include <functional>
 
 /* Custom Includes */
 #include "BaseChunk.h"
@@ -83,27 +84,13 @@ public:
     void TrackProcessTime(bool bTrackTime, std::string sTrackerMessage);
 
     /*
-     * @brief used to test the processing of a particular module
-     * @param[in] pBaseChunk Pointer to base chuk
-     */
-    void TestProcess(std::shared_ptr<BaseChunk> pBaseChunk);
-
-    /*
-     * @brief Puts the module into a test mode where a single chunk will be processed and returned when requested
-     * @param[in] Boolean as to whethere the module should be in test mode
-     */
-    void SetTestMode(bool bTestModeState);
-
-    /*
-     * @brief If the mo
-     * @param[in] Boolean as to whethere the module should be in test mode
-     */
-    std::shared_ptr<BaseChunk> GetTestOutput();
-
-    /*
      * @brief Function to start the reporting thread
      */
     void StartReporting();
+
+    template <typename T>
+    void RegisterChunkCallbackFunction(ChunkType eChunkType,T function);
+    void CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk);
 
 private:
     size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
@@ -112,9 +99,6 @@ private:
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
-
-    bool m_bTestMode;                                                       ///< Boolean as to whether the module is doing doing normal processing or test processing
-    std::shared_ptr<BaseChunk> m_pTestChunkOutput;                          ///< Member used to store test outputs
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
@@ -129,13 +113,14 @@ protected:
     std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
     std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
 
+    std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
 
     /**
      * @brief Returns true if a message pointer had been retrieved an passed on to next module.
      *          If no pointer in queue then returns false
      * @param[in] pBaseChunk pointer to base chunk
      */
-    virtual void Process(std::shared_ptr<BaseChunk> pBaseChunk);
+    virtual void DefaultProcess(std::shared_ptr<BaseChunk> pBaseChunk);
 
     /**
      * @brief Passes base chunk pointer to next module
