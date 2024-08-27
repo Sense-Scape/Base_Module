@@ -32,7 +32,7 @@ void BaseModule::ContinuouslyTryProcess()
     {
         std::shared_ptr<BaseChunk> pBaseChunk;
         if (TakeFromBuffer(pBaseChunk))
-            DefaultProcess(pBaseChunk);
+            CallChunkCallbackFunction(pBaseChunk);
         else
         {
             // Wait to be notified that there is data available
@@ -180,10 +180,19 @@ void BaseModule::StartReportingLoop()
 template <typename T>
 void BaseModule::RegisterChunkCallbackFunction(ChunkType eChunkType,T function)
 {
+    std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
     m_FunctionCallbackMap[eChunkType] = std::bind(function, this, std::placeholders::_1); 
 }
 
 void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk)
 {
-    m_FunctionCallbackMap[pBaseChunk->GetChunkType()](pBaseChunk);
+    std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
+
+    auto eChunkType = pBaseChunk->GetChunkType();
+    
+    if (m_FunctionCallbackMap.find(eChunkType) != m_FunctionCallbackMap.end())
+        m_FunctionCallbackMap[eChunkType](pBaseChunk);
+    else
+        TryPassChunk(pBaseChunk);
+    
 }

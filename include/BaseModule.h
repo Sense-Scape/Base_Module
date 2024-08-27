@@ -113,6 +113,7 @@ protected:
     std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
     std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
 
+    std::mutex m_FunctionCallbackMapMutex; 
     std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
 
     /**
