@@ -17,6 +17,7 @@
 #include <vector>
 #include <chrono>
 #include <queue>
+#include <functional>
 
 /* Custom Includes */
 #include "BaseChunk.h"
@@ -83,59 +84,51 @@ public:
     void TrackProcessTime(bool bTrackTime, std::string sTrackerMessage);
 
     /*
-     * @brief used to test the processing of a particular module
-     * @param[in] pBaseChunk Pointer to base chuk
-     */
-    void TestProcess(std::shared_ptr<BaseChunk> pBaseChunk);
-
-    /*
-     * @brief Puts the module into a test mode where a single chunk will be processed and returned when requested
-     * @param[in] Boolean as to whethere the module should be in test mode
-     */
-    void SetTestMode(bool bTestModeState);
-
-    /*
-     * @brief If the mo
-     * @param[in] Boolean as to whethere the module should be in test mode
-     */
-    std::shared_ptr<BaseChunk> GetTestOutput();
-
-    /*
      * @brief Function to start the reporting thread
      */
     void StartReporting();
 
+    /**
+     * @brief Registers which function should be called when processing a chunk
+     * @param[in] eChunkType pointer to chunk to be processed
+     * @param[in] function class function (&,ClassName::FunctionName)
+     */
+    template <typename T>
+    void RegisterChunkCallbackFunction(ChunkType eChunkType,T function);
+
+    /**
+     * @brief Calls processing function for particular chunk type
+     * @param[in] pBaseChunk pointer to chunk to be processed
+     */
+    void CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk);
+
 private:
     size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
 
+    // Contolling Timing For Debugging
     std::atomic<bool> m_bTrackProcessTime = false;                          ///< Boolean as to whether to track and log the processing time
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
 
-    bool m_bTestMode;                                                       ///< Boolean as to whether the module is doing doing normal processing or test processing
-    std::shared_ptr<BaseChunk> m_pTestChunkOutput;                          ///< Member used to store test outputs
-
 protected:
+    // Controlling Queues 
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
-    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
+    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;     ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
     std::thread m_thread;                                           ///< Thread object for module processing
     bool m_bAlreadyLoggedBufferFull;                                ///< Boolean State machine tracking if we have logged whether queue is full
 
+    // Controlling Reporting
     std::thread m_QueueSizeReportingThread;
     std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
     std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
 
-
-    /**
-     * @brief Returns true if a message pointer had been retrieved an passed on to next module.
-     *          If no pointer in queue then returns false
-     * @param[in] pBaseChunk pointer to base chunk
-     */
-    virtual void Process(std::shared_ptr<BaseChunk> pBaseChunk);
+    // Controling Function Calls
+    std::mutex m_FunctionCallbackMapMutex; 
+    std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
 
     /**
      * @brief Passes base chunk pointer to next module
@@ -153,7 +146,7 @@ protected:
      */
     bool TakeFromBuffer(std::shared_ptr<BaseChunk> &pBaseChunk);
 
-    /*
+    /**
      * @brief Calls the infinite loop to report
      */
     void StartReportingLoop();

@@ -7,7 +7,6 @@ BaseModule::BaseModule(unsigned uMaxInputBufferSize) :
     m_pNextModule(nullptr),
     m_bShutDown()
 {
-
 }
 
 BaseModule::~BaseModule()
@@ -20,18 +19,13 @@ BaseModule::~BaseModule()
         m_thread.join();
 }
 
-void BaseModule::Process(std::shared_ptr<BaseChunk> pBaseChunk)
-{
-    TryPassChunk(pBaseChunk);
-}
-
 void BaseModule::ContinuouslyTryProcess()
 {
     while (!m_bShutDown)
     {
         std::shared_ptr<BaseChunk> pBaseChunk;
         if (TakeFromBuffer(pBaseChunk))
-            Process(pBaseChunk);
+            CallChunkCallbackFunction(pBaseChunk);
         else
         {
             // Wait to be notified that there is data available
@@ -56,8 +50,6 @@ void BaseModule::StartProcessing()
         // Log warning
         std::string strWarning = std::string(__FUNCTION__) + ": Processing thread already started";
         PLOG_WARNING << strWarning;
-        // And force a crash if in debug and not release
-        assert(true && m_bTestMode);
     }
 }
 
@@ -89,8 +81,6 @@ bool BaseModule::TryPassChunk(const std::shared_ptr<BaseChunk> &pBaseChunk)
 
     if (m_pNextModule != nullptr)
         bReturnSuccessful = m_pNextModule->TakeChunkFromModule(std::move(pBaseChunk));
-    else if (m_bTestMode)
-        m_pTestChunkOutput = pBaseChunk;
 
     return bReturnSuccessful;
 }
@@ -152,28 +142,6 @@ void BaseModule::TrackProcessTime(bool bTrackTime, std::string sTrackerMessage)
     m_CurrentTrackingTime = std::chrono::high_resolution_clock::now();
 }
 
-void BaseModule::TestProcess(std::shared_ptr<BaseChunk> pBaseChunk)
-{
-    Process(pBaseChunk);
-}
-
-std::shared_ptr<BaseChunk> BaseModule::GetTestOutput()
-{
-    if (m_pTestChunkOutput != nullptr)
-        return std::move(m_pTestChunkOutput);
-    else
-    {
-        std::string strError = std::string(__FUNCTION__) + " No test chunk output to return";
-        PLOG_ERROR << strError;
-        throw;
-    }
-}
-
-void BaseModule::SetTestMode(bool bTestModeState)
-{
-    m_bTestMode = bTestModeState;
-}
-
 void BaseModule::StartReporting()
 {
     m_QueueSizeReportingThread = std::thread([this]()
@@ -192,12 +160,30 @@ void BaseModule::StartReportingLoop()
 
         // Then transmit
         auto pQueueChunk = std::make_shared<QueueLengthChunk>(strModuleName, u16CurrentBufferSize);
-        auto bSuccessfullyPassed = TryPassChunk(pQueueChunk);
-
-        if (!bSuccessfullyPassed)
-            PLOG_WARNING << GetModuleType() + " Failed to pass chunk" ;    
+        CallChunkCallbackFunction(pQueueChunk);
 
         // And sleep as not to send too many
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
+}
+
+template <typename T>
+void BaseModule::RegisterChunkCallbackFunction(ChunkType eChunkType,T function)
+{
+    std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
+    m_FunctionCallbackMap[eChunkType] = std::bind(function, this, std::placeholders::_1); 
+}
+
+void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk)
+{
+    std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
+    auto eChunkType = pBaseChunk->GetChunkType();
+    
+    // Check if we have registered a function to process the chunk
+    if (m_FunctionCallbackMap.find(eChunkType) != m_FunctionCallbackMap.end())
+        m_FunctionCallbackMap[eChunkType](pBaseChunk);
+    else
+        // Otherwise pass on
+        TryPassChunk(pBaseChunk);
+    
 }
