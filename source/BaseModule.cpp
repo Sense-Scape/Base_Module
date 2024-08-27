@@ -160,10 +160,7 @@ void BaseModule::StartReportingLoop()
 
         // Then transmit
         auto pQueueChunk = std::make_shared<QueueLengthChunk>(strModuleName, u16CurrentBufferSize);
-        auto bSuccessfullyPassed = TryPassChunk(pQueueChunk);
-
-        if (!bSuccessfullyPassed)
-            PLOG_WARNING << GetModuleType() + " Failed to pass chunk" ;    
+        CallChunkCallbackFunction(pQueueChunk);
 
         // And sleep as not to send too many
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -180,12 +177,13 @@ void BaseModule::RegisterChunkCallbackFunction(ChunkType eChunkType,T function)
 void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk)
 {
     std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
-
     auto eChunkType = pBaseChunk->GetChunkType();
     
+    // Check if we have registered a function to process the chunk
     if (m_FunctionCallbackMap.find(eChunkType) != m_FunctionCallbackMap.end())
         m_FunctionCallbackMap[eChunkType](pBaseChunk);
     else
+        // Otherwise pass on
         TryPassChunk(pBaseChunk);
     
 }

@@ -88,19 +88,31 @@ public:
      */
     void StartReporting();
 
+    /**
+     * @brief Registers which function should be called when processing a chunk
+     * @param[in] eChunkType pointer to chunk to be processed
+     * @param[in] function class function (&,ClassName::FunctionName)
+     */
     template <typename T>
     void RegisterChunkCallbackFunction(ChunkType eChunkType,T function);
+
+    /**
+     * @brief Calls processing function for particular chunk type
+     * @param[in] pBaseChunk pointer to chunk to be processed
+     */
     void CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk);
 
 private:
     size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
 
+    // Contolling Timing For Debugging
     std::atomic<bool> m_bTrackProcessTime = false;                          ///< Boolean as to whether to track and log the processing time
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
 
 protected:
+    // Controlling Queues 
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
     std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;     ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
@@ -109,10 +121,12 @@ protected:
     std::thread m_thread;                                           ///< Thread object for module processing
     bool m_bAlreadyLoggedBufferFull;                                ///< Boolean State machine tracking if we have logged whether queue is full
 
+    // Controlling Reporting
     std::thread m_QueueSizeReportingThread;
     std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
     std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
 
+    // Controling Function Calls
     std::mutex m_FunctionCallbackMapMutex; 
     std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
 
@@ -132,7 +146,7 @@ protected:
      */
     bool TakeFromBuffer(std::shared_ptr<BaseChunk> &pBaseChunk);
 
-    /*
+    /**
      * @brief Calls the infinite loop to report
      */
     void StartReportingLoop();
