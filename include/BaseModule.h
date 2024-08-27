@@ -102,7 +102,7 @@ private:
 
 protected:
     std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
-    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer; ///< Input buffer of module
+    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;     ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
@@ -115,13 +115,6 @@ protected:
 
     std::mutex m_FunctionCallbackMapMutex; 
     std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
-
-    /**
-     * @brief Returns true if a message pointer had been retrieved an passed on to next module.
-     *          If no pointer in queue then returns false
-     * @param[in] pBaseChunk pointer to base chunk
-     */
-    virtual void DefaultProcess(std::shared_ptr<BaseChunk> pBaseChunk);
 
     /**
      * @brief Passes base chunk pointer to next module

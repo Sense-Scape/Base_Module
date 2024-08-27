@@ -7,8 +7,6 @@ BaseModule::BaseModule(unsigned uMaxInputBufferSize) :
     m_pNextModule(nullptr),
     m_bShutDown()
 {
-
-    RegisterChunkCallbackFunction(ChunkType::ChunkBase, &BaseModule::DefaultProcess);
 }
 
 BaseModule::~BaseModule()
@@ -19,11 +17,6 @@ BaseModule::~BaseModule()
     // Then we can try close the threads
     if(m_thread.joinable())
         m_thread.join();
-}
-
-void BaseModule::DefaultProcess(std::shared_ptr<BaseChunk> pBaseChunk)
-{
-    TryPassChunk(pBaseChunk);
 }
 
 void BaseModule::ContinuouslyTryProcess()
