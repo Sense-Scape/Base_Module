@@ -167,13 +167,6 @@ void BaseModule::StartReportingLoop()
     }
 }
 
-template <typename T>
-void BaseModule::RegisterChunkCallbackFunction(ChunkType eChunkType,T function)
-{
-    std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
-    m_FunctionCallbackMap[eChunkType] = std::bind(function, this, std::placeholders::_1); 
-}
-
 void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk)
 {
     std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
