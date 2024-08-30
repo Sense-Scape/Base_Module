@@ -89,18 +89,26 @@ public:
     void StartReporting();
 
     /**
-     * @brief Registers which function should be called when processing a chunk
-     * @param[in] eChunkType pointer to chunk to be processed
-     * @param[in] function class function (&,ClassName::FunctionName)
-     */
-    template <typename T>
-    void RegisterChunkCallbackFunction(ChunkType eChunkType,T function);
-
-    /**
      * @brief Calls processing function for particular chunk type
      * @param[in] pBaseChunk pointer to chunk to be processed
      */
     void CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk);
+
+    /**
+     * @brief Registers which function should be called when processing a chunk
+     * @param[in] eChunkType pointer to chunk to be processed
+     * @param[in] function class function (&,ClassName::FunctionName)
+     */
+    template <typename ClassType>
+    void RegisterChunkCallbackFunction(ChunkType eChunkType, 
+                                    void (ClassType::*function)(std::shared_ptr<BaseChunk>), 
+                                    BaseModule* pDerivedModule)
+    {
+        std::unique_lock<std::mutex> BufferAccessLock(m_FunctionCallbackMapMutex);
+        m_FunctionCallbackMap[eChunkType] = [function, pDerivedModule](std::shared_ptr<BaseChunk> chunk) {
+            (static_cast<ClassType*>(pDerivedModule)->*function)(chunk);
+        };
+    }
 
 private:
     size_t m_uMaxInputBufferSize;                                           ///< Max size of the class input buffer
