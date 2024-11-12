@@ -21,6 +21,7 @@ BaseModule::~BaseModule()
 
 void BaseModule::ContinuouslyTryProcess()
 {
+
     while (!m_bShutDown)
     {
         std::shared_ptr<BaseChunk> pBaseChunk;
@@ -51,11 +52,24 @@ void BaseModule::StartProcessing()
         std::string strWarning = std::string(__FUNCTION__) + ": Processing thread already started";
         PLOG_WARNING << strWarning;
     }
+
+    PLOG_WARNING << GetModuleType() +" Thread joined";
+
 }
 
 void BaseModule::StopProcessing()
 {
     m_bShutDown = true;
+
+    while (!m_thread.joinable())
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        PLOG_INFO << "Waiting for " + GetModuleType() + " thread to shut down";
+    }
+
+    // Now we close out the thread and prepare to restart it
+    m_thread.join();
+    m_bShutDown = false;
 }
 
 void BaseModule::SetNextModule(std::shared_ptr<BaseModule> pNextModule)
