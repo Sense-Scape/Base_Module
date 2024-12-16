@@ -53,7 +53,7 @@ public:
     * @brief Get the size of object in bytes
     * @return Size of object in bytes
     */
-    virtual unsigned GetSize();
+    virtual u_int64_t GetSize();
 
     /**
      * @brief Fill a byte array the represents this object
@@ -115,7 +115,8 @@ private:
      * @brief Get the size of object in bytes
      * @return Size of base object in bytes
      */
-    unsigned GetInternalSize();
+    u_int64_t GetInternalSize();
 };
 
 #endif
+

@@ -44,15 +44,15 @@ FFTChunk::FFTChunk(const FFTChunk& FFTChunk) :
     m_vvcfFFTChunks = FFTChunk.m_vvcfFFTChunks;
 }
 
-unsigned FFTChunk::GetSize()
+u_int64_t  FFTChunk::GetSize()
 {
     return GetInternalSize();
 }
 
 
-unsigned FFTChunk::GetInternalSize()
+u_int64_t  FFTChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

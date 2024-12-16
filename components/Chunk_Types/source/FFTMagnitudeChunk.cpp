@@ -44,15 +44,15 @@ FFTMagnitudeChunk::FFTMagnitudeChunk(const FFTMagnitudeChunk& FFTMagnitudeChunk)
     m_vvfFFTMagnitudeChunks = FFTMagnitudeChunk.m_vvfFFTMagnitudeChunks;
 }
 
-unsigned FFTMagnitudeChunk::GetSize()
+u_int64_t  FFTMagnitudeChunk::GetSize()
 {
     return GetInternalSize();
 }
 
 
-unsigned FFTMagnitudeChunk::GetInternalSize()
+u_int64_t  FFTMagnitudeChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

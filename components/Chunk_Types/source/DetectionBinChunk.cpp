@@ -24,7 +24,7 @@ DetectionBinChunk::DetectionBinChunk(const DetectionBinChunk& DetectionBinChunk)
 
 }
 
-unsigned DetectionBinChunk::GetSize()
+u_int64_t  DetectionBinChunk::GetSize()
 {
     return GetInternalSize();
 }
@@ -42,9 +42,9 @@ void DetectionBinChunk::SetDetectionBins(std::vector<std::vector<uint16_t>> &vvu
 }
 
 
-unsigned DetectionBinChunk::GetInternalSize()
+u_int64_t  DetectionBinChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

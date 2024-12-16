@@ -135,14 +135,14 @@ std::string WAVChunk::GetHeaderString()
 	return sHeaderData;
 }
 
-unsigned WAVChunk::GetSize()
+u_int64_t  WAVChunk::GetSize()
 {
 	return GetInternalSize();
 }
 
-unsigned WAVChunk::GetInternalSize()
+u_int64_t  WAVChunk::GetInternalSize()
 {
-	unsigned uByteSize = 0;
+	u_int64_t  uByteSize = 0;
 
 	// First check baseclass
 	BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

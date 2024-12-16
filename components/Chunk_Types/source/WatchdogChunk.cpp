@@ -11,9 +11,9 @@ WatchdogChunk::WatchdogChunk(std::shared_ptr<WatchdogChunk> pWatchdogChunk)
     m_vu8MACAddress = pWatchdogChunk->m_vu8MACAddress;  
 }
 
-unsigned WatchdogChunk::GetSize() 
+u_int64_t  WatchdogChunk::GetSize() 
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     uByteSize += sizeof(m_vu8MACAddress[0])*m_vu8MACAddress.size();
 

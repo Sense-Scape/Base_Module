@@ -42,7 +42,7 @@ public:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetSize() override;
+    u_int64_t GetSize() override;
 
     /**
      * @brief Fill a byte array the represents this object
@@ -64,13 +64,13 @@ protected:
     std::shared_ptr<std::vector<char>> GetInternalSerialisation();
 
 private:
-    uint16_t m_JSONDocumentSize_bytes; ///< Size of json document only used during serialisation
+    u_int64_t m_JSONDocumentSize_bytes; ///< Size of json document only used during serialisation
 
     /**
      * @brief Get the size of object in bytes
      * @return Size of object parent object in bytes
      */
-    unsigned GetInternalSize();
+    u_int64_t GetInternalSize();
 };
 
 #endif
