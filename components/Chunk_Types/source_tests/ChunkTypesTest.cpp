@@ -36,6 +36,7 @@
 
 // T
 #include "TimeChunkTests.h"
+#include "TDOAChunkTests.h"
 
 // W
 #include "WAVChunkTests.h"

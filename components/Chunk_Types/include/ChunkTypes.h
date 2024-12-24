@@ -32,6 +32,7 @@ enum class ChunkType
     DetectionBinChunk,
     DirectionBinChunk,
     QueueLengthChunk,
+    TDOAChunk
 };
 
 #endif
