@@ -33,7 +33,6 @@ TEST_CASE("TDOA Test") {
     pvv16Data->at(1).resize(u64ChunkSize);
     pTDOAChunk->AddData(1,1,{1,1},*pvv16Data);
 
-
     // () channel data size
     // () long lat size
     // () num source identifier size
@@ -61,6 +60,37 @@ TEST_CASE("TDOA Test") {
         CHECK(pTDOAChunk->GetSize() == u32ChunkClassSize);
     }
 
+    SUBCASE("Checking IsEqual functionality") {
+        // Test equality with itself
+        CHECK(pTDOAChunk->IsEqual(*pTDOAChunk));
+
+        // Test equality with a copy
+        auto pTDOAChunkCopy = std::make_shared<TDOAChunk>(*pTDOAChunk);
+        CHECK(pTDOAChunk->IsEqual(*pTDOAChunkCopy));
+
+        // Test inequality when base class changes
+        pTDOAChunkCopy->SetSourceIdentifier({1, 1});
+        CHECK(pTDOAChunk->IsEqual(*pTDOAChunkCopy) == false);
+
+        // Test inequality when TDOA specific members change
+        pTDOAChunkCopy = std::make_shared<TDOAChunk>(*pTDOAChunk);
+        pTDOAChunkCopy->m_dSampleRate = 48000;
+        CHECK(pTDOAChunk->IsEqual(*pTDOAChunkCopy) == false);
+    }
+
+    SUBCASE("Checking serialisation and deserialisation") {
+        // Create a new chunk to deserialize into
+        auto pTDOAChunkDeserialized = std::make_shared<TDOAChunk>();
+        
+        // Serialize original chunk
+        auto pvcBytes = pTDOAChunk->Serialise();
+        
+        // Deserialize into new chunk
+        pTDOAChunkDeserialized->Deserialise(pvcBytes);
+        
+        // Check if the chunks are equal after serialization/deserialization
+        CHECK(pTDOAChunk->IsEqual(*pTDOAChunkDeserialized));
+    }
 }
 
 #endif

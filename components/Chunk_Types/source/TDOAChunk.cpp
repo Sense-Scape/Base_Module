@@ -40,6 +40,34 @@ TDOAChunk::TDOAChunk(const TDOAChunk& TdoaChunk) :
     m_vdLatitude = TdoaChunk.m_vdLatitude;
 }
 
+bool TDOAChunk::IsEqual(TDOAChunk& tdoaChunk)
+{
+    // We can compare base class
+    auto SelfBaseChunk = static_cast<BaseChunk&>(*this);
+    auto comparatorBaseChunk = static_cast<BaseChunk&>(tdoaChunk);
+    bool bBaseEqual = SelfBaseChunk.IsEqual(comparatorBaseChunk);
+    
+    
+    // We can then compare TDOAChunk parameters
+    bool bIsEqual = (
+        (m_dSampleRate == tdoaChunk.m_dSampleRate) &&
+        (m_i64TimeStamp_us == tdoaChunk.m_i64TimeStamp_us) &&
+        (m_u64ChunkSize == tdoaChunk.m_u64ChunkSize) &&
+        (m_u16NumberSources == tdoaChunk.m_u16NumberSources) &&
+        (m_vvvi16TimeChunks == tdoaChunk.m_vvvi16TimeChunks) &&
+        (m_vvu8SourceIdentifiers == tdoaChunk.m_vvu8SourceIdentifiers) &&
+        (m_vu8SourceIdentifierSizes == tdoaChunk.m_vu8SourceIdentifierSizes) &&
+        (m_vu8ChannelsPerSource == tdoaChunk.m_vu8ChannelsPerSource) &&
+        (m_vdLongitude == tdoaChunk.m_vdLongitude) &&
+        (m_vdLatitude == tdoaChunk.m_vdLatitude)
+    );
+
+    // Now we check base and derived classes are equal
+    bIsEqual = (bBaseEqual && bIsEqual);
+
+    return bIsEqual;
+}
+
 u_int64_t  TDOAChunk::GetSize() 
 {
     return GetInternalSize();
@@ -120,43 +148,42 @@ std::shared_ptr<std::vector<char>> TDOAChunk::GetInternalSerialisation()
     memcpy(pcBytes, &m_u16NumberSources, sizeof(m_u16NumberSources));
     pcBytes += sizeof(m_u16NumberSources);
 
+    {
+        // vector of source identifier sizes
+        unsigned uChunkSizeBytes = m_vu8SourceIdentifierSizes.size()*sizeof(m_vu8SourceIdentifierSizes[0]);
+        memcpy(pcBytes, &m_vu8SourceIdentifierSizes[0], uChunkSizeBytes);
+        pcBytes += uChunkSizeBytes;
+    }
+
     auto count = 0;
-    for (size_t i = 0; i < m_vu8SourceIdentifierSizes.size(); i++)
+    for (size_t i = 0; i < m_u16NumberSources; i++)
     {
-        unsigned uChunkSizeBytes = sizeof(m_vu8SourceIdentifierSizes[i]);
-        memcpy(pcBytes, &m_vu8SourceIdentifierSizes[i], uChunkSizeBytes);
-        pcBytes += uChunkSizeBytes;
-
-        uChunkSizeBytes = sizeof(m_vvu8SourceIdentifiers[i])*m_vu8SourceIdentifierSizes[i];
-        memcpy(pcBytes, &m_vvu8SourceIdentifiers[i], uChunkSizeBytes);
-        pcBytes += uChunkSizeBytes;
-    }
-    
-
-    for (const auto& u8NumChannels : m_vu8ChannelsPerSource)
-    {
-        unsigned uChunkSizeBytes = sizeof(u8NumChannels);
-        memcpy(pcBytes, &u8NumChannels, uChunkSizeBytes);
+        unsigned uChunkSizeBytes = sizeof(m_vvu8SourceIdentifiers[i][0])*m_vu8SourceIdentifierSizes[i];
+        memcpy(pcBytes, &m_vvu8SourceIdentifiers[i][0], uChunkSizeBytes);
         pcBytes += uChunkSizeBytes;
     }
 
-    for (const auto& dLong : m_vdLongitude)
     {
-        unsigned uChunkSizeBytes = sizeof(dLong);
-        memcpy(pcBytes, &dLong, uChunkSizeBytes);
+        unsigned uChunkSizeBytes = m_vu8ChannelsPerSource.size()*sizeof(m_vu8ChannelsPerSource[0]);
+        memcpy(pcBytes, &m_vu8ChannelsPerSource[0], uChunkSizeBytes);
         pcBytes += uChunkSizeBytes;
     }
 
-    for (const auto& m_dLat : m_vdLatitude)
     {
-        unsigned uChunkSizeBytes = sizeof(m_dLat);
-        memcpy(pcBytes, &m_dLat, uChunkSizeBytes);
+        unsigned uChunkSizeBytes = m_vdLongitude.size()*sizeof(m_vdLongitude[0]);
+        memcpy(pcBytes, &m_vdLongitude[0], uChunkSizeBytes);
         pcBytes += uChunkSizeBytes;
     }
 
-    for (const auto& vvi16TimeChunkData : m_vvvi16TimeChunks)
     {
-        for (const auto& vi16ChannelData : vvi16TimeChunkData)
+        unsigned uChunkSizeBytes = m_vdLatitude.size()*sizeof(m_vdLatitude[0]);
+        memcpy(pcBytes, &m_vdLatitude[0], uChunkSizeBytes);
+        pcBytes += uChunkSizeBytes;
+    }
+
+    for (auto& vvi16TimeChunkData : m_vvvi16TimeChunks)
+    {
+        for (auto& vi16ChannelData : vvi16TimeChunkData)
         {
             unsigned uChunkSizeBytes = sizeof(vi16ChannelData[0]) * vi16ChannelData.size();
             memcpy(pcBytes, &vi16ChannelData[0], uChunkSizeBytes);
@@ -188,48 +215,39 @@ void TDOAChunk::Deserialise(std::shared_ptr<std::vector<char>> pvBytes)
     memcpy(&m_u16NumberSources, pcBytes, sizeof(m_u16NumberSources));
     pcBytes += sizeof(m_u16NumberSources);
 
+    // Read source identifier sizes
+    m_vu8SourceIdentifierSizes.resize(m_u16NumberSources);
+    memcpy(m_vu8SourceIdentifierSizes.data(), pcBytes, m_u16NumberSources * sizeof(m_vu8SourceIdentifierSizes[0]));
+    pcBytes += m_u16NumberSources * sizeof(m_vu8SourceIdentifierSizes[0]);
+
     // Read source identifiers
+    m_vvu8SourceIdentifiers.clear();
     for (size_t i = 0; i < m_u16NumberSources; i++)
     {
-        uint8_t u8IdentifierSize;
-        memcpy(&u8IdentifierSize, pcBytes, sizeof(u8IdentifierSize));
-        pcBytes += sizeof(u8IdentifierSize);
-        m_vu8SourceIdentifierSizes.push_back(u8IdentifierSize);
-
-        std::vector<uint8_t> vu8Identifier(u8IdentifierSize);
-        memcpy(vu8Identifier.data(), pcBytes, u8IdentifierSize * sizeof(uint8_t));
-        pcBytes += u8IdentifierSize * sizeof(uint8_t);
+        std::vector<uint8_t> vu8Identifier(m_vu8SourceIdentifierSizes[i]);
+        memcpy(vu8Identifier.data(), pcBytes, m_vu8SourceIdentifierSizes[i] * sizeof(uint8_t));
+        pcBytes += m_vu8SourceIdentifierSizes[i] * sizeof(uint8_t);
         m_vvu8SourceIdentifiers.push_back(vu8Identifier);
     }
+    
 
     // Read channels per source
-    for (size_t i = 0; i < m_u16NumberSources; i++)
-    {
-        uint8_t u8NumChannels;
-        memcpy(&u8NumChannels, pcBytes, sizeof(u8NumChannels));
-        pcBytes += sizeof(u8NumChannels);
-        m_vu8ChannelsPerSource.push_back(u8NumChannels);
-    }
+    m_vu8ChannelsPerSource.resize(m_u16NumberSources);
+    memcpy(m_vu8ChannelsPerSource.data(), pcBytes, m_u16NumberSources * sizeof(m_vu8ChannelsPerSource[0]));
+    pcBytes += m_u16NumberSources * sizeof(m_vu8ChannelsPerSource[0]);
 
     // Read longitude values
-    for (size_t i = 0; i < m_u16NumberSources; i++)
-    {
-        double dLong;
-        memcpy(&dLong, pcBytes, sizeof(dLong));
-        pcBytes += sizeof(dLong);
-        m_vdLongitude.push_back(dLong);
-    }
+    m_vdLongitude.resize(m_u16NumberSources);
+    memcpy(m_vdLongitude.data(), pcBytes, m_u16NumberSources * sizeof(m_vdLongitude[0]));
+    pcBytes += m_u16NumberSources * sizeof(m_vdLongitude[0]);
 
     // Read latitude values
-    for (size_t i = 0; i < m_u16NumberSources; i++)
-    {
-        double dLat;
-        memcpy(&dLat, pcBytes, sizeof(dLat));
-        pcBytes += sizeof(dLat);
-        m_vdLatitude.push_back(dLat);
-    }
+    m_vdLatitude.resize(m_u16NumberSources);
+    memcpy(m_vdLatitude.data(), pcBytes, m_u16NumberSources * sizeof(m_vdLatitude[0]));
+    pcBytes += m_u16NumberSources * sizeof(m_vdLatitude[0]);
 
     // Read time chunks data
+    m_vvvi16TimeChunks.clear();
     for (size_t i = 0; i < m_u16NumberSources; i++)
     {
         std::vector<std::vector<int16_t>> vvi16TimeChunkData;

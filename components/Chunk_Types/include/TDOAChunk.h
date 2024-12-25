@@ -35,6 +35,8 @@ public:
      */
     TDOAChunk(double dSampleRate, uint64_t i64TimeStamp_us, uint64_t u64ChunkSize);
 
+    TDOAChunk() {};
+
     /**
      * @brief Copy constructor of a time chunk
      * @param[in] timeChunk reference
@@ -72,6 +74,12 @@ public:
      * @param[in] pvBytes Shared pointer to byte array that shall be used to construct memeber variables
      */
     void Deserialise(std::shared_ptr<std::vector<char>> pBytes);
+
+         /**
+     * @brief Returns if the two classes are equal
+     * @return Reference to the class with which we want to compare
+     */
+    bool IsEqual(TDOAChunk& tdoaChunk);
 
 protected:
     /**
