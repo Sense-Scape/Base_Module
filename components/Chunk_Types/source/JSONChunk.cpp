@@ -84,15 +84,15 @@ bool JSONChunk::IsEqual(JSONChunk& jsonChunk)
 }
 
 
-unsigned JSONChunk::GetSize()
+u_int64_t  JSONChunk::GetSize()
 {
     return GetInternalSize();
 }
 
 
-unsigned JSONChunk::GetInternalSize()
+u_int64_t  JSONChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

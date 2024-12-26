@@ -24,6 +24,17 @@ public:
     GPSChunk();
 
     /**
+     * @brief Construct a new GPSChunk object with all parameters
+     * 
+     * @param timestamp Timestamp of when chunk was created
+     * @param isNorth Whether latitude is north
+     * @param longitude Longitude at point in time
+     * @param isWest Whether longitude is west
+     * @param latitude Latitude at point in time
+     */
+    GPSChunk(uint64_t timestamp, bool isNorth, double longitude, bool isWest, double latitude);
+
+    /**
      * @brief Copy constrtuctor for the FFT chunk
      * @param[in] GPSChunk reference
      */
@@ -45,7 +56,7 @@ public:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetSize() override;
+    u_int64_t GetSize() override;
 
     /**
      * @brief Fill a byte array the represents this object
@@ -83,7 +94,7 @@ private:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetInternalSize();
+    u_int64_t GetInternalSize();
 };
 
 #endif

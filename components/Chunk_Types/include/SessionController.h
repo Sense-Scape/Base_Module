@@ -67,7 +67,7 @@ public:
 	 * @brief Get the size of object in bytes
 	 * @return Custom size of object in bytes
 	 */
-	unsigned GetSize()
+	u_int64_t GetSize()
 	{
 		unsigned uByteSize = 0;
 

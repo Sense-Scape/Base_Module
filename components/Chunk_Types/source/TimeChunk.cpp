@@ -52,15 +52,15 @@ TimeChunk::TimeChunk(const TimeChunk& timeChunk) :
     m_vvi16TimeChunks = timeChunk.m_vvi16TimeChunks;
 }
 
-unsigned TimeChunk::GetSize() 
+u_int64_t  TimeChunk::GetSize() 
 {
     return GetInternalSize();
 }
 
 
-unsigned TimeChunk::GetInternalSize()
+u_int64_t  TimeChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

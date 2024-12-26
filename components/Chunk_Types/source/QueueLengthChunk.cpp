@@ -49,14 +49,14 @@ QueueLengthChunk::QueueLengthChunk() :
 
 }
 
-unsigned QueueLengthChunk::GetSize()
+u_int64_t  QueueLengthChunk::GetSize()
 {
     return GetInternalSize();
 }
 
-unsigned QueueLengthChunk::GetInternalSize()
+u_int64_t  QueueLengthChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

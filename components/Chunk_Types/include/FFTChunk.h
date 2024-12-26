@@ -60,7 +60,7 @@ public:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetSize() override;
+    u_int64_t GetSize() override;
 
     /**
      * @brief Fill a byte array the represents this object
@@ -107,7 +107,7 @@ private:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetInternalSize();
+    u_int64_t GetInternalSize();
 
     /**
      * @brief Fills all channels with zeroed data

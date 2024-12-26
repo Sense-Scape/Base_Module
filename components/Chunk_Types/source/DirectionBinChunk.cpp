@@ -30,14 +30,14 @@ DirectionBinChunk::DirectionBinChunk(const DirectionBinChunk& DirectionBinChunk)
 
 }
 
-unsigned DirectionBinChunk::GetSize()
+u_int64_t  DirectionBinChunk::GetSize()
 {
     return GetInternalSize();
 }
 
-unsigned DirectionBinChunk::GetInternalSize()
+u_int64_t  DirectionBinChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk&>(*this);

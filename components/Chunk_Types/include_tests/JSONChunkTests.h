@@ -13,7 +13,7 @@ TEST_CASE("JSONChunk Test") {
     // All the above sum to bytes below - size of class
     BaseChunk baseChunk;
     // Size of header info, size of channels and size of base class, 2 is for member json size
-    unsigned uClassSize_bytes =  2 + baseChunk.GetSize();
+    unsigned uClassSize_bytes =  8 + baseChunk.GetSize();
 
     // We can also check the basic serialisation functionality
     auto pvcBaseChunkBytes = JSONChunkTestClass.Serialise();

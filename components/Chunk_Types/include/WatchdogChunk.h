@@ -35,7 +35,7 @@ public:
      * @brief Get the size of object in bytes
      * @return Size of object in bytes
      */
-    unsigned GetSize();
+    u_int64_t GetSize();
 
     /**
      * @brief Fill a byte array the represents this object

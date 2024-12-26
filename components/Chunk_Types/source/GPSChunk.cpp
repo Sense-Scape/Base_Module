@@ -9,6 +9,14 @@ GPSChunk::GPSChunk() : BaseChunk(),
 {
 }
 
+GPSChunk::GPSChunk(uint64_t u64Timestamp, bool bIsNorth, double dLongitude, bool bIsWest, double dLatitude)
+        : m_i64TimeStamp(u64Timestamp), m_bIsNorth(bIsNorth), m_dLongitude(dLongitude),
+          m_bIsWest(bIsWest), m_dLatitude(dLatitude) 
+{
+    
+}
+
+
 GPSChunk::GPSChunk(std::shared_ptr<GPSChunk> pGPSChunk) : BaseChunk(pGPSChunk)
 {
     // untested
@@ -29,14 +37,14 @@ GPSChunk::GPSChunk(const GPSChunk &GPSChunk) : BaseChunk(GPSChunk)
     m_bIsWest = GPSChunk.m_bIsWest;
 }
 
-unsigned GPSChunk::GetSize()
+u_int64_t  GPSChunk::GetSize()
 {
     return GetInternalSize();
 }
 
-unsigned GPSChunk::GetInternalSize()
+u_int64_t  GPSChunk::GetInternalSize()
 {
-    unsigned uByteSize = 0;
+    u_int64_t  uByteSize = 0;
 
     // First check baseclass
     BaseChunk SelfBaseChunk = static_cast<BaseChunk &>(*this);

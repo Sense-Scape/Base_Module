@@ -26,14 +26,14 @@ BaseChunk::BaseChunk(const BaseChunk& baseChunk)
 	m_vu8SourceIdentifier = baseChunk.m_vu8SourceIdentifier;
 }
 
-unsigned BaseChunk::GetSize()
+u_int64_t  BaseChunk::GetSize()
 {
 	return GetInternalSize();
 }
 
-unsigned BaseChunk::GetInternalSize()
+u_int64_t  BaseChunk::GetInternalSize()
 {
-	unsigned uByteSize = 0;
+	u_int64_t  uByteSize = 0;
 
 	uByteSize += sizeof(m_u16SourceIdentifierSize);
 

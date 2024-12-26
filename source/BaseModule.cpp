@@ -52,9 +52,6 @@ void BaseModule::StartProcessing()
         std::string strWarning = std::string(__FUNCTION__) + ": Processing thread already started";
         PLOG_WARNING << strWarning;
     }
-
-    PLOG_WARNING << GetModuleType() +" Thread joined";
-
 }
 
 void BaseModule::StopProcessing()
