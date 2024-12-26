@@ -9,6 +9,14 @@ GPSChunk::GPSChunk() : BaseChunk(),
 {
 }
 
+GPSChunk::GPSChunk(uint64_t u64Timestamp, bool bIsNorth, double dLongitude, bool bIsWest, double dLatitude)
+        : m_i64TimeStamp(u64Timestamp), m_bIsNorth(bIsNorth), m_dLongitude(dLongitude),
+          m_bIsWest(bIsWest), m_dLatitude(dLatitude) 
+{
+    
+}
+
+
 GPSChunk::GPSChunk(std::shared_ptr<GPSChunk> pGPSChunk) : BaseChunk(pGPSChunk)
 {
     // untested

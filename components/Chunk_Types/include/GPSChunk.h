@@ -24,6 +24,17 @@ public:
     GPSChunk();
 
     /**
+     * @brief Construct a new GPSChunk object with all parameters
+     * 
+     * @param timestamp Timestamp of when chunk was created
+     * @param isNorth Whether latitude is north
+     * @param longitude Longitude at point in time
+     * @param isWest Whether longitude is west
+     * @param latitude Latitude at point in time
+     */
+    GPSChunk(uint64_t timestamp, bool isNorth, double longitude, bool isWest, double latitude);
+
+    /**
      * @brief Copy constrtuctor for the FFT chunk
      * @param[in] GPSChunk reference
      */
