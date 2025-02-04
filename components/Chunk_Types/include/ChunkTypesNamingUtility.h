@@ -43,8 +43,6 @@ public:
             return "DetectionBinChunk";
         case ChunkType::DirectionBinChunk:
             return "DirectionBinChunk";
-        case ChunkType::QueueLengthChunk:
-            return "QueueLengthChunk";
         default:
             return "Unknown Chunk";
         }
