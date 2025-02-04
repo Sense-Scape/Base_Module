@@ -3,7 +3,6 @@
 
 #include "doctest.h"
 #include "ChunkDuplicatorUtility.h"
-#include "QueueLengthChunk.h"
 
 
 TEST_CASE("Chunk Duplicator Utility Test") {

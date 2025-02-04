@@ -10,7 +10,6 @@
 #include "GPSChunk.h"
 #include "DirectionBinChunk.h"
 #include "DetectionBinChunk.h"
-#include "QueueLengthChunk.h"
 #include "TDOAChunk.h"
 
 class ChunkDuplicatorUtility
