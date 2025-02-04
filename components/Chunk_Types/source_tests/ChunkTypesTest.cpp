@@ -28,9 +28,6 @@
 // J
 #include "JSONChunkTests.h"
 
-// Q
-#include "QueueLengthChunkTests.h"
-
 // S
 #include "SessionControllerTests.h"
 

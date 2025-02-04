@@ -10,7 +10,6 @@
 #include "GPSChunk.h"
 #include "DirectionBinChunk.h"
 #include "DetectionBinChunk.h"
-#include "QueueLengthChunk.h"
 #include "TDOAChunk.h"
 
 class ChunkDuplicatorUtility
@@ -30,7 +29,6 @@ public:
         case ChunkType::GPSChunk:  return std::make_shared<GPSChunk>(std::static_pointer_cast<GPSChunk>(pBaseChunk));
         case ChunkType::DetectionBinChunk:  return std::make_shared<DetectionBinChunk>(std::static_pointer_cast<DetectionBinChunk>(pBaseChunk));
         case ChunkType::DirectionBinChunk:  return std::make_shared<DirectionBinChunk>(std::static_pointer_cast<DirectionBinChunk>(pBaseChunk));
-        case ChunkType::QueueLengthChunk:  return std::make_shared<QueueLengthChunk>(std::static_pointer_cast<QueueLengthChunk>(pBaseChunk));
         case ChunkType::TDOAChunk:  return std::make_shared<TDOAChunk>(std::static_pointer_cast<TDOAChunk>(pBaseChunk));
 
         default:
@@ -75,11 +73,6 @@ public:
         }
         else if (eChunkType == ChunkType::DirectionBinChunk) {
             auto pChunk = std::make_shared<DirectionBinChunk>();
-            pChunk->Deserialise(pBytes);
-            return pChunk;
-        }
-        else if (eChunkType == ChunkType::QueueLengthChunk) {
-            auto pChunk = std::make_shared<QueueLengthChunk>();
             pChunk->Deserialise(pBytes);
             return pChunk;
         }

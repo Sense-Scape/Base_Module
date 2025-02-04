@@ -31,7 +31,6 @@ enum class ChunkType
     GPSChunk,
     DetectionBinChunk,
     DirectionBinChunk,
-    QueueLengthChunk,
     TDOAChunk
 };
 

@@ -3,7 +3,6 @@
 
 #include "doctest.h"
 #include "ChunkDuplicatorUtility.h"
-#include "QueueLengthChunk.h"
 
 
 TEST_CASE("Chunk Duplicator Utility Test") {
@@ -30,24 +29,6 @@ TEST_CASE("Chunk Duplicator Utility Test") {
 		CHECK(pJSONDuplicatedDerivedChunk->IsEqual(*pJSONChunk));
 	}
 
-	/// ===========================================
-	/// 			Queue Length Chunk
-	/// ===========================================
-
-	auto pQueueLengthChunk = std::make_shared<QueueLengthChunk>("TestQueue", 10);
-
-	// Try Duplicate it using the duplicator deserialisation utility
-	auto pDeserialisedDerivedChunk_QueueLengthChunk = ChunkDuplicatorUtility::DeserialiseDerivedChunk(pcJSONBytes, ChunkType::QueueLengthChunk);
-	pDeserialisedDerivedChunk_QueueLengthChunk = std::static_pointer_cast<JSONChunk>(pDeserialisedDerivedChunk_QueueLengthChunk);
-
-	// Try Duplicate it using the duplicator utility
-	auto pDuplicatedDerivedChunk_QueueLengthChunk = ChunkDuplicatorUtility::DuplicateDerivedChunk(pQueueLengthChunk);
-	pDuplicatedDerivedChunk_QueueLengthChunk = std::static_pointer_cast<JSONChunk>(pDuplicatedDerivedChunk_QueueLengthChunk);
-
-	SUBCASE("Testing duplication and deserialisation of QueueLengthC chunk") {
-		CHECK(pDeserialisedDerivedChunk_QueueLengthChunk->IsEqual(*pQueueLengthChunk));
-		CHECK(pDuplicatedDerivedChunk_QueueLengthChunk->IsEqual(*pQueueLengthChunk));
-	}
 }
 
 #endif

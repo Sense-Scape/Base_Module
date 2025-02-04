@@ -159,19 +159,35 @@ void BaseModule::StartReporting()
             { StartReportingLoop(); });
 }
 
+void BaseModule::SetReportingDescriptors(std::string strReportingJsonRoot, std::string strReportingJsonModuleAddition)
+{
+    m_strReportingJsonRoot = strReportingJsonRoot;
+    m_strReportingJsonModuleAddition = strReportingJsonModuleAddition;
+}
+
 void BaseModule::StartReportingLoop()
 {
     while (!m_bShutDown)
     {
+
         // Lets start by generating Queue stat
         std::unique_lock<std::mutex> BufferAccessLock(m_BufferStateMutex);
         uint16_t u16CurrentBufferSize = m_cbBaseChunkBuffer.size();
         auto strModuleName = GetModuleType();
         BufferAccessLock.unlock();
 
+        nlohmann::json j = {
+            {m_strReportingJsonRoot, {
+                { strModuleName  + "_"+ m_strReportingJsonModuleAddition, {  // Extra `{}` around key-value pairs
+                    {"QueueLength", std::to_string(u16CurrentBufferSize)}
+                }}
+            }}
+        };
+
         // Then transmit
-        auto pQueueChunk = std::make_shared<QueueLengthChunk>(strModuleName, u16CurrentBufferSize);
-        CallChunkCallbackFunction(pQueueChunk);
+        auto pJSONChunk = std::make_shared<JSONChunk>();
+        pJSONChunk->m_JSONDocument = j;
+        CallChunkCallbackFunction(pJSONChunk);
 
         // And sleep as not to send too many
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -187,7 +203,7 @@ void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk
     if (m_FunctionCallbackMap.find(eChunkType) != m_FunctionCallbackMap.end())
         m_FunctionCallbackMap[eChunkType](pBaseChunk);
     else
-        // Otherwise pass on
-        TryPassChunk(pBaseChunk);
+        if(!TryPassChunk(pBaseChunk))
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
     
 }

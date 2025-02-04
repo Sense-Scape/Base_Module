@@ -24,7 +24,7 @@
 #include "ChunkTypesNamingUtility.h"
 #include <plog/Log.h>
 #include "plog/Initializers/RollingFileInitializer.h"
-#include "QueueLengthChunk.h"
+#include "JSONChunk.h"
 
 /*
  * @brief Base processing class containing a threaded process
@@ -88,6 +88,11 @@ public:
      */
     void StartReporting();
 
+    /*
+     * @brief Set additional fields for reporting
+     */
+    void SetReportingDescriptors(std::string strReportingJsonRoot, std::string strReportingJsonModuleAddition);
+
     /**
      * @brief Calls processing function for particular chunk type
      * @param[in] pBaseChunk pointer to chunk to be processed
@@ -118,6 +123,9 @@ private:
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
+    
+    std::string m_strReportingJsonRoot = "undefined";
+    std::string m_strReportingJsonModuleAddition = "";
 
 protected:
     // Controlling Queues 
@@ -157,7 +165,7 @@ protected:
     /**
      * @brief Calls the infinite loop to report
      */
-    void StartReportingLoop();
+    virtual void StartReportingLoop();
 };
 
 #endif
