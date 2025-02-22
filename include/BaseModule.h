@@ -123,28 +123,25 @@ private:
     std::string m_sTrackerMessage = "";                                     ///< Log message printed when logging chunk processing time
     std::chrono::high_resolution_clock::time_point m_CurrentTrackingTime;   ///< Initial time used to track time between consecutive chunk passes
     std::chrono::high_resolution_clock::time_point m_PreviousTimeTracking;  ///< Final time used to track time between consecutive chunk passes
-    
-    std::string m_strReportingJsonRoot = "undefined";
-    std::string m_strReportingJsonModuleAddition = "";
 
 protected:
     // Controlling Queues 
-    std::condition_variable m_cvDataInBuffer;                       ///< Conditional variable to control data in circulat buffer
-    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;     ///< Input buffer of module
-    std::shared_ptr<BaseModule> m_pNextModule;                      ///< Shared pointer to next module into which messages are passed
-    std::atomic<bool> m_bShutDown;                                  ///< Whether to try continuously process
-    std::mutex m_BufferStateMutex;                                  ///< Mutex to facilitate multi module buffer size checking
-    std::thread m_thread;                                           ///< Thread object for module processing
-    bool m_bAlreadyLoggedBufferFull;                                ///< Boolean State machine tracking if we have logged whether queue is full
+    std::condition_variable m_cvDataInBuffer;                               ///< Conditional variable to control data in circulat buffer
+    std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;             ///< Input buffer of module
+    std::shared_ptr<BaseModule> m_pNextModule;                              ///< Shared pointer to next module into which messages are passed
+    std::atomic<bool> m_bShutDown;                                          ///< Whether to try continuously process
+    std::mutex m_BufferStateMutex;                                          ///< Mutex to facilitate multi module buffer size checking
+    std::thread m_thread;                                                   ///< Thread object for module processing
+    bool m_bAlreadyLoggedBufferFull;                                        ///< Boolean State machine tracking if we have logged whether queue is full
 
     // Controlling Reporting
-    std::thread m_QueueSizeReportingThread;
-    std::chrono::high_resolution_clock::time_point m_CurrentQueueReportTime;  
-    std::chrono::high_resolution_clock::time_point m_PreviousQueueReportTime;  
+    std::thread m_QueueSizeReportingThread;                                 ///< Thread to report current status of module
+    std::string m_strReportingJsonRoot = "undefined";                       ///< Used to store the overall binary name (eg Sensor/ProcServ)
+    std::string m_strReportingJsonModuleAddition = "";                      ///< Used to inform which module in binary this is
 
     // Controling Function Calls
-    std::mutex m_FunctionCallbackMapMutex; 
-    std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;
+    std::mutex m_FunctionCallbackMapMutex;                                                      ///< Lock to callback map     
+    std::map<ChunkType,std::function<void(std::shared_ptr<BaseChunk>)>> m_FunctionCallbackMap;  ///< Given a chunktype, a different proc function will be called
 
     /**
      * @brief Passes base chunk pointer to next module
@@ -166,6 +163,13 @@ protected:
      * @brief Calls the infinite loop to report
      */
     virtual void StartReportingLoop();
+
+    /**
+     * @brief look for specified key and throw if not found
+     * @param[in] jsonConfig JSON configuration of this module
+     * @param[in] key Key for which on is looking
+     */
+    void CheckAndThrowJSON(const nlohmann::json_abi_v3_11_2::json& j, const std::string& key);
 };
 
 #endif
