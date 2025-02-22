@@ -207,3 +207,12 @@ void BaseModule::CallChunkCallbackFunction(std::shared_ptr<BaseChunk> pBaseChunk
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
     
 }
+
+void BaseModule::CheckAndThrowJSON(const nlohmann::json_abi_v3_11_2::json& j, const std::string& key) {
+    auto it = j.find(key);
+    if (it == j.end()) {
+        std::string strFatal = std::string(__FUNCTION__) + "Key '" + key + "' not found in JSON.";
+        PLOG_FATAL << strFatal;
+        throw std::runtime_error(strFatal);
+    }
+}

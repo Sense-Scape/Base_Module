@@ -166,6 +166,13 @@ protected:
      * @brief Calls the infinite loop to report
      */
     virtual void StartReportingLoop();
+
+    /**
+     * @brief look for specified key and throw if not found
+     * @param[in] jsonConfig JSON configuration of this module
+     * @param[in] key Key for which on is looking
+     */
+    void CheckAndThrowJSON(const nlohmann::json_abi_v3_11_2::json& j, const std::string& key);
 };
 
 #endif
