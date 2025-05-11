@@ -8,10 +8,10 @@ set(INCLUDE_DIR "include")
 set(SOURCE_TESTS_DIR "source_tests")
 set(INCLUDE_TESTS_DIR "include_tests")
 
-message(STATUS "Building for Unix")
+message(STATUS "Generating files to build Base Modules for UNIX")
 
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
+message(STATUS "Base Modules Setting C++ standard to ${CMAKE_CXX_STANDARD}")
 
 # Main executable
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
