@@ -1,1 +1,0 @@
-XCOPY hooks\\* .git\\hooks
