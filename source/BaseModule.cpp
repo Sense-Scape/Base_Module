@@ -74,6 +74,23 @@ void BaseModule::SetNextModule(std::shared_ptr<BaseModule> pNextModule)
     m_pNextModule = pNextModule;
 }
 
+void BaseModule::SetReportingNextModule(std::shared_ptr<BaseModule> pNextModule)
+{
+    m_pNextReportingModule = pNextModule;
+}
+
+bool BaseModule::TryPassReportingChunk(const std::shared_ptr<BaseChunk> &pBaseChunk)
+{
+     // Allow module that one is passing to to facilitate its own locking procedures
+    bool bReturnSuccessful = false;
+
+    if (m_pNextReportingModule != nullptr)
+        bReturnSuccessful = m_pNextReportingModule->TakeChunkFromModule(std::move(pBaseChunk));
+
+    return bReturnSuccessful;
+}
+
+
 bool BaseModule::TryPassChunk(const std::shared_ptr<BaseChunk> &pBaseChunk)
 {
     // Lets first check we are doing timing debugging
@@ -158,7 +175,7 @@ void BaseModule::StartReporting()
     m_QueueSizeReportingThread = std::thread([this]()
             { StartReportingLoop(); });
 }
-
+ 
 void BaseModule::SetReportingDescriptors(std::string strReportingJsonRoot, std::string strReportingJsonModuleAddition)
 {
     m_strReportingJsonRoot = strReportingJsonRoot;
@@ -187,7 +204,7 @@ void BaseModule::StartReportingLoop()
         // Then transmit
         auto pJSONChunk = std::make_shared<JSONChunk>();
         pJSONChunk->m_JSONDocument = j;
-        CallChunkCallbackFunction(pJSONChunk);
+        TryPassReportingChunk(pJSONChunk);
 
         // And sleep as not to send too many
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));

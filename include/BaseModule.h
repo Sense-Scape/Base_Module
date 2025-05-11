@@ -69,6 +69,12 @@ public:
     virtual void SetNextModule(std::shared_ptr<BaseModule> pNextModule);
 
     /*
+     * @brief Set the Next Module object to pass chunks along to
+     * @param[in] m_NextModule pointer to the next module to pass chunk to
+     */
+    virtual void SetReportingNextModule(std::shared_ptr<BaseModule> pNextModule);
+
+    /*
      * @brief Recieves base chunk pointer from previous module
      * @param[in] pBaseChunk pointer to base chunk
      * @return True if message was sucessfully inserted into the buffer
@@ -90,6 +96,8 @@ public:
 
     /*
      * @brief Set additional fields for reporting
+     * @param[in] strReportingJsonRoot string specifying the root of JSON doc
+     * @param[in] strReportingJsonModuleAddition in the case we have multiple of the same module, this differentiates them
      */
     void SetReportingDescriptors(std::string strReportingJsonRoot, std::string strReportingJsonModuleAddition);
 
@@ -129,6 +137,7 @@ protected:
     std::condition_variable m_cvDataInBuffer;                               ///< Conditional variable to control data in circulat buffer
     std::queue<std::shared_ptr<BaseChunk>> m_cbBaseChunkBuffer;             ///< Input buffer of module
     std::shared_ptr<BaseModule> m_pNextModule;                              ///< Shared pointer to next module into which messages are passed
+    std::shared_ptr<BaseModule> m_pNextReportingModule;                     ///< Shared pointer to next module into which messages are passed
     std::atomic<bool> m_bShutDown;                                          ///< Whether to try continuously process
     std::mutex m_BufferStateMutex;                                          ///< Mutex to facilitate multi module buffer size checking
     std::thread m_thread;                                                   ///< Thread object for module processing
@@ -150,6 +159,14 @@ protected:
      * @return False if message was unsucessfully inserted into queue
      */
     bool TryPassChunk(const std::shared_ptr<BaseChunk> &pBaseChunk);
+
+    /**
+     * @brief Passes base chunk pointer to next module
+     * @param[in] pBaseChunk pointer to base chunk
+     * @return True if message was sucessfully inserted into queue
+     * @return False if message was unsucessfully inserted into queue
+     */
+    bool TryPassReportingChunk(const std::shared_ptr<BaseChunk> &pBaseChunk);
 
     /**
      * @brief Tries to extract a message from the input buffer
