@@ -17,6 +17,7 @@ public:
     double m_dLongitude;     ///< Longitude at point in time
     bool m_bIsWest;          ///< Whether latitude is north
     double m_dLatitude;      ///< Latitude at point in time
+    bool m_bIsLocked;         ///< Whether GPS locked or not
 
     /**
      * @brief Construct a new empty GPSChunk object
@@ -31,8 +32,9 @@ public:
      * @param longitude Longitude at point in time
      * @param isWest Whether longitude is west
      * @param latitude Latitude at point in time
+     * @param bIsLocked whether gps is locked 
      */
-    GPSChunk(uint64_t timestamp, bool isNorth, double longitude, bool isWest, double latitude);
+    GPSChunk(uint64_t timestamp, bool isNorth, double longitude, bool isWest, double latitude, bool bIsLocked);
 
     /**
      * @brief Copy constrtuctor for the FFT chunk
