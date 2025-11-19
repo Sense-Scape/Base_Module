@@ -13,9 +13,7 @@ class GPSChunk : public BaseChunk,
 {
 public:
     uint64_t m_i64TimeStamp; ///< Timestamp of when chunk was created
-    bool m_bIsNorth;         ///< Whether latitude is north
     double m_dLongitude;     ///< Longitude at point in time
-    bool m_bIsWest;          ///< Whether latitude is north
     double m_dLatitude;      ///< Latitude at point in time
     bool m_bIsLocked;         ///< Whether GPS locked or not
 
@@ -28,13 +26,11 @@ public:
      * @brief Construct a new GPSChunk object with all parameters
      * 
      * @param timestamp Timestamp of when chunk was created
-     * @param isNorth Whether latitude is north
      * @param longitude Longitude at point in time
-     * @param isWest Whether longitude is west
      * @param latitude Latitude at point in time
      * @param bIsLocked whether gps is locked 
      */
-    GPSChunk(uint64_t timestamp, bool isNorth, double longitude, bool isWest, double latitude, bool bIsLocked);
+    GPSChunk(uint64_t timestamp, double longitude, double latitude, bool bIsLocked);
 
     /**
      * @brief Copy constrtuctor for the FFT chunk

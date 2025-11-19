@@ -22,7 +22,7 @@ TEST_CASE("GPSChunk Test")
         // lets check for equality to see if serialisation works
         CHECK(GPSChunkTestClass.IsEqual(GPSChunkTestClassCopy_0));
         // Then lets ensure that the size of the data contained is 2 bytes
-        CHECK(GPSChunkTestClass.GetSize() == 29);
+        CHECK(GPSChunkTestClass.GetSize() == 27);
     }
 
     // Lets now give the device a unique identifier and see if the size if correct
@@ -32,8 +32,6 @@ TEST_CASE("GPSChunk Test")
     GPSChunkTestClass.m_dLatitude = 100.005;
     GPSChunkTestClass.m_dLatitude = -140.78;
     GPSChunkTestClass.m_i64TimeStamp = 5000984;
-    GPSChunkTestClass.m_bIsNorth = true;
-    GPSChunkTestClass.m_bIsWest = false;
     GPSChunkTestClass.m_bIsLocked = true;
 
     // We can also check serialisation again

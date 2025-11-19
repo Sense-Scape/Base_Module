@@ -3,15 +3,13 @@
 GPSChunk::GPSChunk() : BaseChunk(),
                        m_dLatitude(0),
                        m_dLongitude(0),
-                       m_i64TimeStamp(0),
-                       m_bIsNorth(true),
-                       m_bIsWest(true)
+                       m_i64TimeStamp(0)
 {
 }
 
-GPSChunk::GPSChunk(uint64_t u64Timestamp, bool bIsNorth, double dLongitude, bool bIsWest, double dLatitude, bool bIsLocked)
-        : m_i64TimeStamp(u64Timestamp), m_bIsNorth(bIsNorth), m_dLongitude(dLongitude),
-          m_bIsWest(bIsWest), m_dLatitude(dLatitude) , m_bIsLocked(bIsLocked)
+GPSChunk::GPSChunk(uint64_t u64Timestamp, double dLongitude, double dLatitude, bool bIsLocked)
+        : m_i64TimeStamp(u64Timestamp), m_dLongitude(dLongitude),
+            m_dLatitude(dLatitude) , m_bIsLocked(bIsLocked)
 {
     
 }
@@ -23,8 +21,6 @@ GPSChunk::GPSChunk(std::shared_ptr<GPSChunk> pGPSChunk) : BaseChunk(pGPSChunk)
     m_i64TimeStamp = pGPSChunk->m_i64TimeStamp;
     m_dLongitude = pGPSChunk->m_dLongitude;
     m_dLatitude = pGPSChunk->m_dLatitude;
-    m_bIsNorth = pGPSChunk->m_bIsNorth;
-    m_bIsWest = pGPSChunk->m_bIsWest;
     m_bIsLocked = pGPSChunk->m_bIsLocked;
 }
 
@@ -34,8 +30,6 @@ GPSChunk::GPSChunk(const GPSChunk &GPSChunk) : BaseChunk(GPSChunk)
     m_i64TimeStamp = GPSChunk.m_i64TimeStamp;
     m_dLongitude = GPSChunk.m_dLongitude;
     m_dLatitude = GPSChunk.m_dLatitude;
-    m_bIsNorth = GPSChunk.m_bIsNorth;
-    m_bIsWest = GPSChunk.m_bIsWest;
     m_bIsLocked = GPSChunk.m_bIsLocked;
 }
 
@@ -56,8 +50,6 @@ u_int64_t  GPSChunk::GetInternalSize()
     uByteSize += sizeof(m_i64TimeStamp);
     uByteSize += sizeof(m_dLongitude);
     uByteSize += sizeof(m_dLatitude);
-    uByteSize += sizeof(m_bIsNorth);
-    uByteSize += sizeof(m_bIsWest);
 
     return uByteSize;
 }
@@ -92,11 +84,6 @@ std::shared_ptr<std::vector<char>> GPSChunk::GetInternalSerialisation()
     memcpy(pcBytes, &m_dLatitude, sizeof(m_dLatitude));
     pcBytes += sizeof(m_dLatitude);
 
-    memcpy(pcBytes, &m_bIsNorth, sizeof(m_bIsNorth));
-    pcBytes += sizeof(m_bIsNorth);
-
-    memcpy(pcBytes, &m_bIsWest, sizeof(m_bIsWest));
-    pcBytes += sizeof(m_bIsWest);
     return pvBytes;
 }
 
@@ -120,11 +107,6 @@ void GPSChunk::Deserialise(std::shared_ptr<std::vector<char>> pvBytes)
 
     memcpy(&m_dLatitude, pcBytes, sizeof(m_dLatitude));
     pcBytes += sizeof(m_dLongitude);
-
-    memcpy(&m_bIsNorth, pcBytes, sizeof(m_bIsNorth));
-    pcBytes += sizeof(m_bIsNorth);
-
-    memcpy(&m_bIsWest, pcBytes, sizeof(m_bIsWest));
 }
 
 bool GPSChunk::IsEqual(GPSChunk &GPSChunk)
@@ -138,9 +120,7 @@ bool GPSChunk::IsEqual(GPSChunk &GPSChunk)
     bool bIsEqual = (m_bIsLocked == GPSChunk.m_bIsLocked &&
                      m_i64TimeStamp == GPSChunk.m_i64TimeStamp &&
                      m_dLongitude == GPSChunk.m_dLongitude &&
-                     m_dLatitude == GPSChunk.m_dLatitude &&
-                     m_bIsNorth == GPSChunk.m_bIsNorth &&
-                     m_bIsWest == GPSChunk.m_bIsWest);
+                     m_dLatitude == GPSChunk.m_dLatitude);
 
     bIsEqual = (bBaseEqual && bIsEqual);
 
@@ -158,11 +138,9 @@ std::shared_ptr<nlohmann::json> GPSChunk::ToJSON()
 
     // Adding in FFTChunk fields
     JSONDocument[strChunkName]["IsLocked"] = std::to_string(m_bIsLocked);
-    JSONDocument[strChunkName]["TimeStamp"] = std::to_string(m_i64TimeStamp);
+    JSONDocument[strChunkName]["timeStamp_ms"] = std::to_string(m_i64TimeStamp);
     JSONDocument[strChunkName]["Longitude"] = std::to_string(m_dLongitude);
     JSONDocument[strChunkName]["Latitude"] = std::to_string(m_dLatitude);
-    JSONDocument[strChunkName]["IsNorth"] = std::to_string(m_bIsNorth);
-    JSONDocument[strChunkName]["IsWest"] = std::to_string(m_bIsWest);
 
     return std::make_shared<nlohmann::json>(JSONDocument);
 }
